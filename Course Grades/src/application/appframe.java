@@ -7,7 +7,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import startup.newactions;
+import startup.launch;
 
 public class appframe extends JFrame{
 
@@ -39,15 +39,6 @@ public class appframe extends JFrame{
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		Container pane = getContentPane();
-		
-		/*//Menubar
-		JMenuBar menubar = new JMenuBar();
-		JMenu filemenu = new JMenu("File");
-		JMenu helpmenu = new JMenu("Help");
-		
-		menubar.add(filemenu);
-		menubar.add(helpmenu);
-		setJMenuBar(menubar);*/
 		
 		//Grades Table
 		String[] columns = new String[] {
@@ -189,7 +180,7 @@ public class appframe extends JFrame{
 		needbutton.setToolTipText("Allows you to find what percentage of points you need in catgories without grades to get a specific overall grade");
 		updatebutton.setToolTipText("Updates grade in course and saves class information");
 		pane.add(actionspanel, BorderLayout.SOUTH);
-
+		
 		//Action Listeners
 		addbutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
@@ -336,7 +327,7 @@ public class appframe extends JFrame{
 			FileWriter fw = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
 			fw.write(filename + "\n");
 			fw.write(semestertitle + "\n");
-			fw.write("true");
+			fw.write("" + quickcheck.isSelected());
 			fw.close();
 			
 			

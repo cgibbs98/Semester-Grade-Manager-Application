@@ -80,7 +80,7 @@ public class createnew extends JFrame{
 				String name = fileactions.getFileName();
 				if(name != null){
 					dispose();
-					application.appframe.main(name, false);
+					application.appframe.main(name, true);
 				}//End of if
 			}  
 		});

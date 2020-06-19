@@ -10,7 +10,15 @@ public class misc{
 		JFrame frame = new JFrame();
 		JOptionPane.showMessageDialog(frame, message, "Error", JOptionPane.ERROR_MESSAGE);
 		
-	}//End of error message
+	}//End of errorMessage
+	
+	public static void infoMessage(String message){
+		
+		//Create info message to user
+		JFrame frame = new JFrame();
+		JOptionPane.showMessageDialog(frame, message, "Note", JOptionPane.INFORMATION_MESSAGE);
+		
+	}//End of infoMessage
 	
 	public static boolean isANumber(String value){
 		
@@ -24,6 +32,6 @@ public class misc{
 		}//End of try catch
 		return b;
 		
-	}//End of error message
+	}//End of isANumber
 
 }//End of misc

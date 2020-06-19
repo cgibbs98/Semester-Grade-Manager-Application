@@ -34,9 +34,9 @@ public class frameactions extends appframe{
 		
 		//Removes all rows from table
 		DefaultTableModel model = (DefaultTableModel) gradestable.getModel();
-			for(int i = model.getRowCount()-1; i >= 0; i--){
-				model.removeRow(i);
-			}//End of for
+		for(int i = model.getRowCount()-1; i >= 0; i--){
+			model.removeRow(i);
+		}//End of for
 		
 	}//End of removeAllRows
 	
@@ -215,6 +215,7 @@ public class frameactions extends appframe{
 		}//End of try catch
 		
 	}//End of updateAndSave
+	
 	
 	
 	

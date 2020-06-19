@@ -7,9 +7,6 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import startup.launch;
-import startup.newactions;
-
 public class pointsneeded extends JFrame{
 
 	public JTextField pointsfield = new JTextField("");
