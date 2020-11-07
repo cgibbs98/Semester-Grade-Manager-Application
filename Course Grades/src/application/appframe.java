@@ -29,16 +29,33 @@ public class appframe extends JFrame{
 		
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int w = (int) (screenSize.getWidth()/1.5);
-		int h = (int) (screenSize.getHeight()/2.5);
+		int w = (int) (screenSize.getWidth()/1.375);
+		int h = (int) (screenSize.getHeight()/2.375);
 		setSize(w, h);
 		
 		//Properties
 		setTitle("Semester Grade Manager Application - ");
 		setResizable(false);
 		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		Container pane = getContentPane();
+		
+		//Menubar
+		JMenuBar menubar = new JMenuBar();
+		JMenu filemenu = new JMenu("File");
+		JMenu helpmenu = new JMenu("Help");
+		JMenuItem saveitem = new JMenuItem("Save");
+		JMenuItem saveexititem = new JMenuItem("Save & Exit");
+		JMenuItem exititem = new JMenuItem("Exit");
+		JMenuItem aboutitem = new JMenuItem("About");
+		filemenu.add(saveitem);
+		filemenu.addSeparator();
+		filemenu.add(saveexititem);
+		filemenu.add(exititem);
+		helpmenu.add(aboutitem);
+		menubar.add(filemenu);
+		menubar.add(helpmenu);
+		setJMenuBar(menubar);
 		
 		//Grades Table
 		String[] columns = new String[] {
@@ -121,8 +138,8 @@ public class appframe extends JFrame{
 		JLabel scalelabel = new JLabel("Final Grade Extra Credit or Scale: ");
 		scalefield.setPreferredSize(new Dimension(20, scalefield.getPreferredSize().height));
 		scalefield.setHorizontalAlignment(SwingConstants.RIGHT);
-		scalelabel.setToolTipText("Raises overall grade in course by set points. (Works for overall grade penalties with negative valeus as well)");
-		scalefield.setToolTipText("Raises overall grade in course by set points. (Works for overall grade penalties with negative valeus as well)");
+		scalelabel.setToolTipText("Raises overall grade in course by set points and works for overall grade penalties with negative values as well. (Must save for changes to take effect)");
+		scalefield.setToolTipText("Raises overall grade in course by set points and works for overall grade penalties with negative values as well. (Must save for changes to take effect)");
 		scalepanel.add(scalelabel);
 		scalepanel.add(scalefield);
 		westbox.add(scalepanel);
@@ -165,8 +182,8 @@ public class appframe extends JFrame{
 		JPanel actionspanel = new JPanel();
 		JLabel quicklabel = new JLabel("Open This Semester at Launch:");
 		quickcheck.setSelected(quickcheckvalue);
-		quicklabel.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch");
-		quickcheck.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch");
+		quicklabel.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch (Must save for changes to take effect)");
+		quickcheck.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch (Must save for changes to take effect)");
 		needbutton.setEnabled(false);
 		actionspanel.add(quicklabel);
 		actionspanel.add(quickcheck);
@@ -225,7 +242,35 @@ public class appframe extends JFrame{
 		    public void mouseClicked(MouseEvent e) {  
 		    	quickcheck.setSelected(!(quickcheck.isSelected()));
 		    }  
-		}); 
+		});
+		saveitem.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	frameactions.updateAndSave();
+		    }
+		});
+		saveexititem.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	frameactions.updateAndSave();
+		    	System.exit(0);
+		    }
+		});
+		exititem.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	saveframe.main(0);
+		    }
+		});
+		aboutitem.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	help.aboutframe.main(null);
+		    }
+		});
+		
+		//Window Listener for Close Button
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				saveframe.main(0);
+			}
+		});
 		
 	}//End of appframe
 

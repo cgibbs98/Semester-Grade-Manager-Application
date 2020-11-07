@@ -151,7 +151,7 @@ public class fileactions extends createnew{
 							    Files.createDirectories(subfolderpath);
 					    	}//End of if
 					    	
-					    	//Adds csv file for category
+					    	//Adds file for category
 					    	else{
 					    		categories++;
 					    		String subfilename = "savedsemesters/" + semesterfile.getName() + "/" + "class" + classes + "/" + "category" + categories + ".txt";
