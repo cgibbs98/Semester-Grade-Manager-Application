@@ -3,6 +3,7 @@ package application;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 
 
@@ -35,23 +36,72 @@ public class saveframe extends JFrame{
 		buttonspanel.add(cancelbutton);
 		pane.add(buttonspanel, BorderLayout.SOUTH);
 		
+		//Prevent interactions with main app frame
+		appframe.gradestable.setEnabled(false);
+		appframe.categorycombo.setEnabled(false);
+		appframe.classcombo.setEnabled(false);
+		appframe.addbutton.setEnabled(false);
+		appframe.removebutton.setEnabled(false);
+		appframe.updatebutton.setEnabled(false);
+		appframe.needbutton.setEnabled(false);
+		appframe.scalefield.setEnabled(false);
+		
 		//Action Listeners
 		yesbutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				frameactions.updateAndSave();
 				dispose();
+				appframe.savecheck = true;
+				//Reallow interactions with main app frame
+				appframe.gradestable.setEnabled(true);
+				appframe.categorycombo.setEnabled(true);
+				appframe.classcombo.setEnabled(true);
+				appframe.addbutton.setEnabled(true);
+				appframe.removebutton.setEnabled(true);
+				appframe.updatebutton.setEnabled(true);
+				DefaultTableModel valuemodel = (DefaultTableModel) appframe.valuetable.getModel();
+				if(valuemodel.getValueAt(0, 2).toString().equals("N/A")){
+					appframe.needbutton.setEnabled(true);
+				}//End of if
+				appframe.scalefield.setEnabled(true);
 				performAction(code);
 			}  
 		});
 		nobutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				dispose();
+				appframe.savecheck = true;
+				//Reallow interactions with main app frame
+				appframe.gradestable.setEnabled(true);
+				appframe.categorycombo.setEnabled(true);
+				appframe.classcombo.setEnabled(true);
+				appframe.addbutton.setEnabled(true);
+				appframe.removebutton.setEnabled(true);
+				appframe.updatebutton.setEnabled(true);
+				DefaultTableModel valuemodel = (DefaultTableModel) appframe.valuetable.getModel();
+				if(valuemodel.getValueAt(0, 2).toString().equals("N/A")){
+					appframe.needbutton.setEnabled(true);
+				}//End of if
+				appframe.scalefield.setEnabled(true);
 				performAction(code);
 			}  
 		});
 		cancelbutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				dispose();
+				appframe.savecheck = true;
+				//Reallow interactions with main app frame
+				appframe.gradestable.setEnabled(true);
+				appframe.categorycombo.setEnabled(true);
+				appframe.classcombo.setEnabled(true);
+				appframe.addbutton.setEnabled(true);
+				appframe.removebutton.setEnabled(true);
+				appframe.updatebutton.setEnabled(true);
+				DefaultTableModel valuemodel = (DefaultTableModel) appframe.valuetable.getModel();
+				if(valuemodel.getValueAt(0, 2).toString().equals("N/A")){
+					appframe.needbutton.setEnabled(true);
+				}//End of if
+				appframe.scalefield.setEnabled(true);
 			}  
 		});
 		
@@ -59,6 +109,19 @@ public class saveframe extends JFrame{
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				dispose();
+				appframe.savecheck = true;
+				//Reallow interactions with main app frame
+				appframe.gradestable.setEnabled(true);
+				appframe.categorycombo.setEnabled(true);
+				appframe.classcombo.setEnabled(true);
+				appframe.addbutton.setEnabled(true);
+				appframe.removebutton.setEnabled(true);
+				appframe.updatebutton.setEnabled(true);
+				DefaultTableModel valuemodel = (DefaultTableModel) appframe.valuetable.getModel();
+				if(valuemodel.getValueAt(0, 2).toString().equals("N/A")){
+					appframe.needbutton.setEnabled(true);
+				}//End of if
+				appframe.scalefield.setEnabled(true);
 			}
 		});
 		

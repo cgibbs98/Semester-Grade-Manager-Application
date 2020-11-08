@@ -24,6 +24,10 @@ public class appframe extends JFrame{
 	public static JButton removebutton = new JButton("Remove Empty Grades");
 	public static JButton updatebutton = new JButton("Update and Save Grades");
 	public static ArrayList<categoryobject> categorylist = new ArrayList();
+	public static boolean savecheck = true;
+	public static String[][] lasttable;
+	public static String lastscale;
+	public static boolean lastquick;
 	
 	public appframe(String filename, boolean quickcheckvalue){
 		
@@ -148,19 +152,21 @@ public class appframe extends JFrame{
 		JPanel categorypanel = new JPanel();
 		JLabel categorylabel = new JLabel("Select Another Category: ");
 		categorycombo.setPreferredSize(new Dimension(200, categorycombo.getPreferredSize().height));
-		categorylabel.setToolTipText("Select another category to view");
-		categorycombo.setToolTipText("Select another category to view");
+		categorylabel.setToolTipText("Select another category to view (Must save current grades to access)");
+		categorycombo.setToolTipText("Select another category to view (Must save current grades to access)");
 		categorypanel.add(categorylabel);
 		categorypanel.add(categorycombo);
+		categorycombo.setEnabled(false);
 		
         //Class
         JPanel classpanel = new JPanel();
         JLabel classlabel = new JLabel("Select Another Class: ");
         classcombo.setPreferredSize(new Dimension(150, classcombo.getPreferredSize().height));
-        classlabel.setToolTipText("Select another class to view");
-        classcombo.setToolTipText("Select another class to view");
+        classlabel.setToolTipText("Select another class to view (Must save current grades to access)");
+        classcombo.setToolTipText("Select another class to view (Must save current grades to access)");
         classpanel.add(classlabel);
         classpanel.add(classcombo);
+        classcombo.setEnabled(false);
         
         //Adds Above 2 Components
         westbox.add(classpanel);
@@ -225,17 +231,23 @@ public class appframe extends JFrame{
 		updatebutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				frameactions.updateAndSave();
+				categorycombo.setEnabled(true);
+				classcombo.setEnabled(true);
 			}  
 		});
 		openFiles(filename);
 		categorycombo.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		        switchCategory(categorycombo.getSelectedIndex());
+		    	switchCategory(categorycombo.getSelectedIndex());
+		    	categorycombo.setEnabled(false);
+				classcombo.setEnabled(false);
 		    }
 		});
 		classcombo.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		        switchClass(classcombo.getSelectedIndex(), filename);
+		    	switchClass(classcombo.getSelectedIndex(), filename);
+		    	categorycombo.setEnabled(false);
+				classcombo.setEnabled(false);
 		    }
 		});
 		quicklabel.addMouseListener(new MouseAdapter() {  
@@ -256,7 +268,15 @@ public class appframe extends JFrame{
 		});
 		exititem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	saveframe.main(0);
+		    	if(savecheck == true){
+		    		savecheck = false;
+		    		if(checkLastUpdated() == false){
+		    			saveframe.main(0);
+		    		}//End of if
+		    		else{
+		    			System.exit(0);
+		    		}//End of else
+		    	}//End of if
 		    }
 		});
 		aboutitem.addActionListener (new ActionListener () {
@@ -268,12 +288,54 @@ public class appframe extends JFrame{
 		//Window Listener for Close Button
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				saveframe.main(0);
+				if(savecheck == true){
+		    		savecheck = false;
+		    		if(checkLastUpdated() == false){
+		    			saveframe.main(0);
+		    		}//End of if
+		    		else{
+		    			System.exit(0);
+		    		}//End of else
+		    	}//End of if
 			}
 		});
 		
+		//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
+		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
+		lasttable = new String[gradesmodel.getRowCount()][3];
+		for(int i = 0; i < lasttable.length; i++) {
+			lasttable[i][0] = gradesmodel.getValueAt(i, 1).toString();
+			lasttable[i][1] = gradesmodel.getValueAt(i, 2).toString();
+			lasttable[i][2] = gradesmodel.getValueAt(i, 3).toString();
+		}//End of for
+		lastscale = scalefield.getText();
+		lastquick = quickcheck.isSelected();
+		
 	}//End of appframe
 
+	public boolean checkLastUpdated(){
+		
+		//Check every editable value in the application and return false if something is different from last update, otherwise return true
+		boolean b = true;
+		if(!(lastquick == quickcheck.isSelected())){
+			return b = false;
+		}//End of if
+		if(!(lastscale.equals(scalefield.getText()))){
+			return b = false;
+		}//End of else if
+		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
+		if(!(lasttable.length == gradesmodel.getRowCount())){
+			return b = false;
+		}
+		for(int i = 0; i < lasttable.length; i++) {
+			if( !(lasttable[i][0].equals(gradesmodel.getValueAt(i, 1).toString())) || !(lasttable[i][1].equals(gradesmodel.getValueAt(i, 2).toString())) || !(lasttable[i][2].equals(gradesmodel.getValueAt(i, 3).toString())) ){
+				return b = false;
+			}//End of if
+		}//End of for
+		return b;
+		
+	}//End of checkLastUpdated
+	
 	
 	
 	
@@ -377,7 +439,6 @@ public class appframe extends JFrame{
 			
 			
 		} catch (Exception e) {
-			e.printStackTrace();
 			utilities.misc.errorMessage("Can't open semester files! Closing application.");
 			System.exit(0);
 		}//End of try catch
@@ -397,6 +458,17 @@ public class appframe extends JFrame{
 		frameactions.removeAllRows();
 		frameactions.addCurrentClass(categorylist.get(index).getFilepath());
 		frameactions.loadCategoryValues(Double.parseDouble(categorylist.get(index).getWeight()));
+		
+		//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
+		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
+		lasttable = new String[gradesmodel.getRowCount()][3];
+		for(int i = 0; i < lasttable.length; i++) {
+			lasttable[i][0] = gradesmodel.getValueAt(i, 1).toString();
+			lasttable[i][1] = gradesmodel.getValueAt(i, 2).toString();
+			lasttable[i][2] = gradesmodel.getValueAt(i, 3).toString();
+		}//End of for
+		lastscale = scalefield.getText();
+		lastquick = quickcheck.isSelected();
 		
 	}//End of switchCategory
 	
@@ -470,12 +542,22 @@ public class appframe extends JFrame{
 				needbutton.setEnabled(false);
 			}//End of else
 			
+			//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
+			DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
+			lasttable = new String[gradesmodel.getRowCount()][3];
+			for(int i = 0; i < lasttable.length; i++) {
+				lasttable[i][0] = gradesmodel.getValueAt(i, 1).toString();
+				lasttable[i][1] = gradesmodel.getValueAt(i, 2).toString();
+				lasttable[i][2] = gradesmodel.getValueAt(i, 3).toString();
+			}//End of for
+			lastscale = scalefield.getText();
+			lastquick = quickcheck.isSelected();
+			
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}//End of try catch
 		
-	}//End of switchCategory
+	}//End of switchClass
 	
 	public static void main(String filename, boolean quickcheck) {
 		

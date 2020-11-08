@@ -214,6 +214,17 @@ public class frameactions extends appframe{
 			
 		}//End of try catch
 		
+		//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
+		DefaultTableModel newmodel = (DefaultTableModel) gradestable.getModel();
+		appframe.lasttable = new String[newmodel.getRowCount()][3];
+		for(int i = 0; i < lasttable.length; i++) {
+			appframe.lasttable[i][0] = newmodel.getValueAt(i, 1).toString();
+			appframe.lasttable[i][1] = newmodel.getValueAt(i, 2).toString();
+			appframe.lasttable[i][2] = newmodel.getValueAt(i, 3).toString();
+		}//End of for
+		appframe.lastscale = scalefield.getText();
+		appframe.lastquick = quickcheck.isSelected();
+		
 	}//End of updateAndSave
 	
 	
