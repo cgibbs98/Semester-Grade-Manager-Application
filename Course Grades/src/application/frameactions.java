@@ -110,6 +110,95 @@ public class frameactions extends appframe{
 		
 	}//End of addCurrentClass
 	
+	public static void save(int categoryid, int classid){
+		
+		//Checks to make sure no empty fields including extra credit/scale field will be written existing file and that total points possible isn't 0
+		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
+		double total = 0.0;
+		for(int i = 0; i < gradesmodel.getRowCount(); i++){
+			if( gradesmodel.getValueAt(i, 1).equals("") || gradesmodel.getValueAt(i, 2).equals("") || gradesmodel.getValueAt(i, 3).equals("") || 
+			!(utilities.misc.isANumber(gradesmodel.getValueAt(i, 2).toString())) || !(utilities.misc.isANumber(gradesmodel.getValueAt(i, 3).toString())) ){
+				utilities.misc.errorMessage("Can't save grades! Blank field in grades table detected or points field is not a number.");
+				return;
+			}//End of if
+			total += Double.parseDouble(gradesmodel.getValueAt(i, 3).toString());
+		}//End of for
+		if( !(utilities.misc.isANumber(scalefield.getText())) ){
+			utilities.misc.errorMessage("Can't save grades! Extra Credit/Scale field is blank or not a number.");
+			return;
+		}//End of if
+		if(total <= 0){
+			utilities.misc.errorMessage("Can't save grades! Points possible must not be 0 or a negative value.");
+			return;
+		}//End of if
+		
+		//Writes updated table to existing category file
+		try {
+			FileWriter categoryscanner = new FileWriter(new File(categorylist.get(categoryid).getFilepath()));
+			for(int i = 0; i < gradesmodel.getRowCount(); i++){
+				categoryscanner.write(gradesmodel.getValueAt(i, 1) + "," + gradesmodel.getValueAt(i, 2) + "," + gradesmodel.getValueAt(i, 3));
+				if(i != gradesmodel.getRowCount()-1){
+					categoryscanner.write("\n");
+				}//End of if
+			}//End of for
+			categoryscanner.close();
+		} catch (IOException e) {
+			
+		}//End of try catch
+		
+		//Updates quicklaunch file to determine whether the launch window can be used or not
+		String quicksemester = "";
+		String quicktitle = "";
+		try {
+			Scanner quickscan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+			quicksemester = quickscan.nextLine();
+			quicktitle = quickscan.nextLine();
+			quickscan.close();
+			FileWriter quickwrite = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+			quickwrite.write(quicksemester + "\n");
+			quickwrite.write(quicktitle + "\n");
+			quickwrite.write("" + appframe.quickcheck.isSelected());
+			quickwrite.close();
+		} catch (Exception e) {
+			
+		}//End of try catch
+		
+		//Update master and class files to determine which class and category gets shown during launch
+		try {
+			
+			//Master file
+			String classfile = "class" + (classid+1) + ".txt";
+			FileWriter masterwrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/master.txt"));
+			masterwrite.write(quicktitle + "\n");
+			masterwrite.write(classfile);
+			masterwrite.close();
+			
+			//Class file
+			ArrayList<String> classlines = new ArrayList();
+			Scanner classscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/" + classfile));
+			while(classscan.hasNext()){
+				classlines.add(classscan.nextLine());
+			}//End of while
+			classscan.close();
+			classlines.set(2, scalefield.getText());
+			classlines.set((classlines.size()-1), "" + categoryid);
+			FileWriter classwrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/" + classfile));
+			for(int i = 0; i < classlines.size(); i++){
+				classwrite.write(classlines.get(i));
+				if(i != classlines.size()-1){
+					classwrite.write("\n");
+				}//End of if
+			}//End of for
+			classwrite.close();
+			
+		} catch (Exception e) {
+			
+		}//End of try catch
+		
+		
+		
+	}//End of save
+	
 	public static void updateAndSave(){
 		
 		//Checks to make sure no empty fields including extra credit/scale field will be written existing file and that total points possible isn't 0
@@ -161,8 +250,7 @@ public class frameactions extends appframe{
 			}//End of for
 			categoryscanner.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}//End of try catch
 		
 		//Updates quicklaunch file to determine whether the launch window can be used or not

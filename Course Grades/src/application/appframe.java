@@ -28,6 +28,9 @@ public class appframe extends JFrame{
 	public static String[][] lasttable;
 	public static String lastscale;
 	public static boolean lastquick;
+	public boolean classswitch = false;
+	public int prevcategory;
+	public int prevclass;
 	
 	public appframe(String filename, boolean quickcheckvalue){
 		
@@ -93,6 +96,8 @@ public class appframe extends JFrame{
 		//Table Sorting
 		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(gradestable.getModel());
 		gradestable.setRowSorter(sorter);
+		gradestable.setToolTipText("Table that displays set of assignments/exams and their individual grades");
+		gradestablepane.setToolTipText("Table that displays set of assignments/exams and their individual grades");
 		Box eastbox = Box.createVerticalBox();
 		eastbox.add(gradestablepane);
 		
@@ -134,6 +139,8 @@ public class appframe extends JFrame{
         DefaultTableCellRenderer rightRenderer2 = new DefaultTableCellRenderer();
         rightRenderer2.setHorizontalAlignment(JLabel.RIGHT);
         valuetable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer2);
+        valuetable.setToolTipText("Table that displays current course grade and some values for calculating it");
+        valuetablepane.setToolTipText("Table that displays current course grade and some values for calculating it");
 		Box westbox = Box.createVerticalBox();
 		westbox.add(valuetablepane);
 		
@@ -152,21 +159,19 @@ public class appframe extends JFrame{
 		JPanel categorypanel = new JPanel();
 		JLabel categorylabel = new JLabel("Select Another Category: ");
 		categorycombo.setPreferredSize(new Dimension(200, categorycombo.getPreferredSize().height));
-		categorylabel.setToolTipText("Select another category to view (Must save current grades to access)");
-		categorycombo.setToolTipText("Select another category to view (Must save current grades to access)");
+		categorylabel.setToolTipText("Select another category to view (Autosaves current grades before accessing)");
+		categorycombo.setToolTipText("Select another category to view (Autosaves current grades before accessing)");
 		categorypanel.add(categorylabel);
 		categorypanel.add(categorycombo);
-		categorycombo.setEnabled(false);
 		
         //Class
         JPanel classpanel = new JPanel();
         JLabel classlabel = new JLabel("Select Another Class: ");
         classcombo.setPreferredSize(new Dimension(150, classcombo.getPreferredSize().height));
-        classlabel.setToolTipText("Select another class to view (Must save current grades to access)");
-        classcombo.setToolTipText("Select another class to view (Must save current grades to access)");
+        classlabel.setToolTipText("Select another class to view (Autosaves current grades before accessing)");
+        classcombo.setToolTipText("Select another class to view (Autosaves current grades before accessing)");
         classpanel.add(classlabel);
         classpanel.add(classcombo);
-        classcombo.setEnabled(false);
         
         //Adds Above 2 Components
         westbox.add(classpanel);
@@ -177,9 +182,11 @@ public class appframe extends JFrame{
 		//Name + Weight Type
 		Box northbox = Box.createVerticalBox();
 		JPanel coursepanel = new JPanel();
+		coursename.setToolTipText("Name of the current course and its code");
 		coursepanel.add(coursename);
 		northbox.add(coursepanel);
 		JPanel weightpanel = new JPanel();
+		weightname.setToolTipText("Name of the current category and its weight");
 		weightpanel.add(weightname);
 		northbox.add(weightpanel);
 		pane.add(northbox, BorderLayout.NORTH);
@@ -231,23 +238,21 @@ public class appframe extends JFrame{
 		updatebutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				frameactions.updateAndSave();
-				categorycombo.setEnabled(true);
-				classcombo.setEnabled(true);
 			}  
 		});
 		openFiles(filename);
 		categorycombo.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	switchCategory(categorycombo.getSelectedIndex());
-		    	categorycombo.setEnabled(false);
-				classcombo.setEnabled(false);
+		    	if(classswitch == false){
+		    		frameactions.save(prevcategory, prevclass);
+		    		switchCategory(categorycombo.getSelectedIndex());
+		    	}//End of if
 		    }
 		});
 		classcombo.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
+		    	frameactions.save(prevcategory, prevclass);
 		    	switchClass(classcombo.getSelectedIndex(), filename);
-		    	categorycombo.setEnabled(false);
-				classcombo.setEnabled(false);
 		    }
 		});
 		quicklabel.addMouseListener(new MouseAdapter() {  
@@ -437,6 +442,8 @@ public class appframe extends JFrame{
 			fw.write("" + quickcheck.isSelected());
 			fw.close();
 			
+			prevcategory = categorycombo.getSelectedIndex();
+			prevclass = classcombo.getSelectedIndex();
 			
 		} catch (Exception e) {
 			utilities.misc.errorMessage("Can't open semester files! Closing application.");
@@ -458,6 +465,7 @@ public class appframe extends JFrame{
 		frameactions.removeAllRows();
 		frameactions.addCurrentClass(categorylist.get(index).getFilepath());
 		frameactions.loadCategoryValues(Double.parseDouble(categorylist.get(index).getWeight()));
+		prevcategory = categorycombo.getSelectedIndex();
 		
 		//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
 		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
@@ -475,6 +483,7 @@ public class appframe extends JFrame{
 	public void switchClass(int index, String filename){
 		
 		//Switch category title and grades table to current selected category
+		classswitch = true;
 		try {
 			
 			//Scan for class title
@@ -541,6 +550,8 @@ public class appframe extends JFrame{
 				valuemodel.setValueAt("N/A", 2, 2);
 				needbutton.setEnabled(false);
 			}//End of else
+			prevcategory = categorycombo.getSelectedIndex();
+			prevclass = classcombo.getSelectedIndex();
 			
 			//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
 			DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
@@ -556,6 +567,7 @@ public class appframe extends JFrame{
 		} catch (FileNotFoundException e) {
 			
 		}//End of try catch
+		classswitch = false;
 		
 	}//End of switchClass
 	
