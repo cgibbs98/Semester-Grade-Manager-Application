@@ -10,6 +10,8 @@ public class launch extends JFrame{
 
 	public JLabel quicklabel = new JLabel("  " + "Quicklaunch Semester - ");
 	public JButton button1 = new JButton("Quicklaunch");
+	public JButton button3 = new JButton("Open Existng Semester");
+	public JButton button4 = new JButton("Manage Semesters");
 	public static String quickname = "";
 	public static boolean skipcheck = false;
 	
@@ -17,8 +19,8 @@ public class launch extends JFrame{
 		
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		int w = (int) (screenSize.getWidth()/2.375);
-		int h = (int) (screenSize.getHeight()/7.375);
+		int w = (int) (screenSize.getWidth()/1.875);
+		int h = (int) (screenSize.getHeight()/6.875);
 		setSize(w, h);
 		
 		//Properties
@@ -30,20 +32,21 @@ public class launch extends JFrame{
 		//Components
 		Container pane = getContentPane();
 		Box launchbox = Box.createVerticalBox();
-		JLabel welcomelabel = new JLabel("  " + "Welcome to the Application! Please select an action below.");
+		JLabel welcomelabel = new JLabel("  " + "Welcome to the application! Please select an action below.");
 		launchbox.add(welcomelabel);
 		launchbox.add(quicklabel);
 		pane.add(launchbox, BorderLayout.CENTER);
 		JPanel buttonpanel = new JPanel();
 		JButton button2 = new JButton("Create New Semester");
-		JButton button3 = new JButton("Open Existng Semester");
-		JButton button4 = new JButton("Exit Application");
+		JButton button5 = new JButton("Exit Application");
 		button1.setEnabled(false);
 		buttonpanel.add(button1);
 		buttonpanel.add(button2);
 		buttonpanel.add(button3);
 		buttonpanel.add(button4);
+		buttonpanel.add(button5);
 		pane.add(buttonpanel, BorderLayout.SOUTH);
+		checkDirectories();
 		checkQuicklaunch();
 		
 		//Action Listeners
@@ -70,11 +73,21 @@ public class launch extends JFrame{
 		});
 		button4.addActionListener(new ActionListener(){  
 		public void actionPerformed(ActionEvent e){  
+			dispose();
+			filemanager.main(null);
+		}  
+		});
+		button5.addActionListener(new ActionListener(){  
+		public void actionPerformed(ActionEvent e){  
 			System.exit(0);
 		}  
 		});
 		
 	}//End of launch
+	
+	
+	
+	
 	
 	public void checkQuicklaunch(){
 		
@@ -91,11 +104,38 @@ public class launch extends JFrame{
 			quickname = filename;
 			button1.setEnabled(true);
 			
+			//If the program is relaunching set program to false and delete dummy file
+			File relaunchfile = new File("relaunch.txt");
+			if(relaunchfile.exists()){
+				skipcheck = false;
+				relaunchfile.delete();
+			}//End of if
+			
 		} catch (Exception e) {
 			quicklabel.setText(quicklabel.getText() + "N/A");
 		}//End of try catch
 		
 	}//End of checkQuicklaunch
+	
+	public void checkDirectories(){
+		
+		//Load all semesters
+		File directory = new File(System.getProperty("user.dir") + "/savedsemesters");
+		FileFilter filter = new FileFilter() {
+			public boolean accept(File file) {
+				return file.isDirectory();
+			}
+		};
+		File[] folderset = directory.listFiles(filter);
+		
+		//Disable opening and managing semesters if none are present
+		if(folderset.length == 0){
+			button1.setEnabled(false);
+			button3.setEnabled(false);
+			button4.setEnabled(false);
+		}//End of folderset
+		
+	}//End of checkDirectories
 	
 	public void quickLaunch() {
 		dispose();

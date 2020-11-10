@@ -1,5 +1,6 @@
 package utilities;
 
+import java.awt.*;
 import javax.swing.*;
 
 public class misc{
@@ -12,13 +13,13 @@ public class misc{
 		
 	}//End of errorMessage
 	
-	public static void infoMessage(String message){
+	public static int savePrompt(){
 		
-		//Create info message to user
-		JFrame frame = new JFrame();
-		JOptionPane.showMessageDialog(frame, message, "Note", JOptionPane.INFORMATION_MESSAGE);
+		//Create prompt for user to save
+		int result = JOptionPane.showConfirmDialog((Component) null, "You have unsaved data. Do you want to save grades before proceeding?", "Unsaved Data", JOptionPane.YES_NO_CANCEL_OPTION);
+	    return result;
 		
-	}//End of infoMessage
+	}//End of savePrompt
 	
 	public static boolean isANumber(String value){
 		

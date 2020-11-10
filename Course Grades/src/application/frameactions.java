@@ -207,17 +207,17 @@ public class frameactions extends appframe{
 		for(int i = 0; i < gradesmodel.getRowCount(); i++){
 			if( gradesmodel.getValueAt(i, 1).equals("") || gradesmodel.getValueAt(i, 2).equals("") || gradesmodel.getValueAt(i, 3).equals("") || 
 			!(utilities.misc.isANumber(gradesmodel.getValueAt(i, 2).toString())) || !(utilities.misc.isANumber(gradesmodel.getValueAt(i, 3).toString())) ){
-				utilities.misc.errorMessage("Can't update grades! Blank field in grades table detected or points field is not a number.");
+				utilities.misc.errorMessage("Can't update and save grades! Blank field in grades table detected or points field is not a number.");
 				return;
 			}//End of if
 			total += Double.parseDouble(gradesmodel.getValueAt(i, 3).toString());
 		}//End of for
 		if( !(utilities.misc.isANumber(scalefield.getText())) ){
-			utilities.misc.errorMessage("Can't update grades! Extra Credit/Scale field is blank or not a number.");
+			utilities.misc.errorMessage("Can't update and save grades! Extra Credit/Scale field is blank or not a number.");
 			return;
 		}//End of if
 		if(total <= 0){
-			utilities.misc.errorMessage("Can't update grades! Points possible must not be 0 or a negative value.");
+			utilities.misc.errorMessage("Can't update and save grades! Points possible must not be 0 or a negative value.");
 			return;
 		}//End of if
 		
@@ -298,20 +298,20 @@ public class frameactions extends appframe{
 			}//End of for
 			classwrite.close();
 			
+			//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
+			DefaultTableModel newmodel = (DefaultTableModel) appframe.gradestable.getModel();
+			appframe.lasttable = new String[newmodel.getRowCount()][3];
+			for(int i = 0; i < appframe.lasttable.length; i++) {
+				appframe.lasttable[i][0] = newmodel.getValueAt(i, 1).toString();
+				appframe.lasttable[i][1] = newmodel.getValueAt(i, 2).toString();
+				appframe.lasttable[i][2] = newmodel.getValueAt(i, 3).toString();
+			}//End of for
+			appframe.lastscale = appframe.scalefield.getText();
+			appframe.lastquick = appframe.quickcheck.isSelected();
+			
 		} catch (Exception e) {
 			
 		}//End of try catch
-		
-		//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
-		DefaultTableModel newmodel = (DefaultTableModel) gradestable.getModel();
-		appframe.lasttable = new String[newmodel.getRowCount()][3];
-		for(int i = 0; i < lasttable.length; i++) {
-			appframe.lasttable[i][0] = newmodel.getValueAt(i, 1).toString();
-			appframe.lasttable[i][1] = newmodel.getValueAt(i, 2).toString();
-			appframe.lasttable[i][2] = newmodel.getValueAt(i, 3).toString();
-		}//End of for
-		appframe.lastscale = scalefield.getText();
-		appframe.lastquick = quickcheck.isSelected();
 		
 	}//End of updateAndSave
 	
