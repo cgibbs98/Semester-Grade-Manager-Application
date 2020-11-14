@@ -7,7 +7,7 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-public class pointsneeded extends JFrame{
+public class pointsneeded extends JDialog{
 
 	public JTextField pointsfield = new JTextField("");
 	public JLabel needlabel = new JLabel("");
@@ -25,6 +25,7 @@ public class pointsneeded extends JFrame{
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		//Components
 		Container pane = getContentPane();
@@ -55,14 +56,6 @@ public class pointsneeded extends JFrame{
 		});
 		closebutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				appframe.gradestable.setEnabled(true);
-				appframe.categorycombo.setEnabled(true);
-				appframe.classcombo.setEnabled(true);
-				appframe.addbutton.setEnabled(true);
-				appframe.removebutton.setEnabled(true);
-				appframe.updatebutton.setEnabled(true);
-				appframe.needbutton.setEnabled(true);
-				appframe.scalefield.setEnabled(true);
 				pointsfield.setText("");
 				dispose();
 			}  
@@ -71,14 +64,6 @@ public class pointsneeded extends JFrame{
 		//Window Listener for Close Button
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				appframe.gradestable.setEnabled(true);
-				appframe.categorycombo.setEnabled(true);
-				appframe.classcombo.setEnabled(true);
-				appframe.addbutton.setEnabled(true);
-				appframe.removebutton.setEnabled(true);
-				appframe.updatebutton.setEnabled(true);
-				appframe.needbutton.setEnabled(true);
-				appframe.scalefield.setEnabled(true);
 				pointsfield.setText("");
 				dispose();
 		}

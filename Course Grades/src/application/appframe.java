@@ -20,9 +20,9 @@ public class appframe extends JFrame{
 	public static JComboBox classcombo = new JComboBox();
 	public static JCheckBox quickcheck = new JCheckBox();
 	public static JButton needbutton = new JButton("Check Points Needed");
-	public static JButton addbutton = new JButton("Add New Grade");
-	public static JButton removebutton = new JButton("Remove Empty Grades");
-	public static JButton updatebutton = new JButton("Update and Save Grades");
+	public JButton addbutton = new JButton("Add New Grade");
+	public JButton removebutton = new JButton("Remove Empty Grades");
+	public JButton updatebutton = new JButton("Update and Save Grades");
 	public static ArrayList<categoryobject> categorylist = new ArrayList();
 	public static boolean combolisten;
 	public static int prevcategory;
@@ -55,6 +55,8 @@ public class appframe extends JFrame{
 		JMenuItem startupitem = new JMenuItem("Open Startup");
 		JMenuItem exitsaveitem = new JMenuItem("Save & Exit");
 		JMenuItem exititem = new JMenuItem("Exit");
+		JMenuItem helpitem = new JMenuItem("Help Topics");
+		JMenuItem propitem = new JMenuItem("View Properties");
 		JMenuItem aboutitem = new JMenuItem("About");
 		filemenu.add(saveitem);
 		filemenu.addSeparator();
@@ -63,6 +65,9 @@ public class appframe extends JFrame{
 		filemenu.addSeparator();
 		filemenu.add(exitsaveitem);
 		filemenu.add(exititem);
+		helpmenu.add(helpitem);
+		helpmenu.add(propitem);
+		helpmenu.addSeparator();
 		helpmenu.add(aboutitem);
 		menubar.add(filemenu);
 		menubar.add(helpmenu);
@@ -228,14 +233,6 @@ public class appframe extends JFrame{
 		});
 		needbutton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				gradestable.setEnabled(false);
-				categorycombo.setEnabled(false);
-				classcombo.setEnabled(false);
-				addbutton.setEnabled(false);
-				removebutton.setEnabled(false);
-				updatebutton.setEnabled(false);
-				needbutton.setEnabled(false);
-				scalefield.setEnabled(false);
 				pointsneeded.main(null);
 			}  
 		});
@@ -353,6 +350,16 @@ public class appframe extends JFrame{
 				else{
 					System.exit(0);
 				}//End of else
+		    }
+		});
+		helpitem.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	help.helpframe.main(null);
+		    }
+		});
+		propitem.addActionListener (new ActionListener () {
+		    public void actionPerformed(ActionEvent e) {
+		    	help.propertiesframe.main(filename);
 		    }
 		});
 		aboutitem.addActionListener (new ActionListener () {

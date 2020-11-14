@@ -5,8 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
-import java.util.Scanner;
-
+import java.util.*;
 import javax.swing.*;
 
 import application.appframe;
@@ -72,9 +71,11 @@ public class filemanager extends JFrame{
 		Container pane = getContentPane();
 		JPanel buttonpanel = new JPanel();
 		JButton southbutton1 = new JButton("Perform Action");
-		JButton southbutton2 = new JButton("Close Window");
+		JButton southbutton2 = new JButton("Open Folder");
+		JButton southbutton3 = new JButton("Close Window");
 		buttonpanel.add(southbutton1);
 		buttonpanel.add(southbutton2);
+		buttonpanel.add(southbutton3);
 		pane.add(buttonpanel, BorderLayout.SOUTH);
 		
 		//Westbox
@@ -286,6 +287,23 @@ public class filemanager extends JFrame{
 		});
 		southbutton2.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
+				
+				//Open current semester folder
+				Desktop desktop = Desktop.getDesktop();
+		        File open = null;
+		        try {
+		            open = new File(System.getProperty("user.dir") + "/savedsemesters/" + semestercombo.getSelectedItem().toString());
+		            desktop.open(open);
+		        } catch (Exception ex) {
+		        	utilities.misc.errorMessage("An error has occured, Please try again later.");
+		        }
+		        
+			}  
+		});
+		southbutton3.addActionListener(new ActionListener(){  
+			public void actionPerformed(ActionEvent e){
+				File relaunchfile = new File("relaunch.txt");
+		    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
 				removeCombos();
 				filenamefield.setText("");
 				dispose();
@@ -296,6 +314,8 @@ public class filemanager extends JFrame{
 		//Window Listener for Close Button
 		addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) {
+			File relaunchfile = new File("relaunch.txt");
+	    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
 			removeCombos();
 			filenamefield.setText("");
 			dispose();

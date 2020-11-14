@@ -5,7 +5,7 @@ import java.awt.event.*;
 import java.net.*;
 import javax.swing.*;
 
-public class aboutframe extends JFrame{
+public class aboutframe extends JDialog{
 
 	public aboutframe(){
 		
@@ -20,6 +20,7 @@ public class aboutframe extends JFrame{
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 		
 		//Components
 		Container pane = getContentPane();
@@ -31,7 +32,7 @@ public class aboutframe extends JFrame{
 		JLabel projectlink = new JLabel("Github Link");
 		projectlink.setToolTipText("https://github.com/cgibbs98/Semester-Grade-Manager-Application");
 		
-		//Create hyperlinks
+		//Create hyperlinks (Tutorial at https://www.codejava.net/java-se/swing/how-to-create-hyperlink-with-jlabel-in-java-swing)
 		accountlink.setForeground(Color.BLUE.darker());
 		accountlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		accountlink.addMouseListener(new MouseAdapter() {

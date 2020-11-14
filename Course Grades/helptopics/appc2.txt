@@ -1,0 +1,1 @@
+Adding and removing grades make up the basics of managing grades for a semester. You will be able to add as many grades as you like for a semester and the option to remove all empty grades in a semester to maintain the table effectively and easily for each category.

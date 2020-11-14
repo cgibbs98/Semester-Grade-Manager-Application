@@ -2,6 +2,7 @@ package startup;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import javax.swing.*;
 
 public class createnew extends JFrame{
@@ -88,6 +89,8 @@ public class createnew extends JFrame{
 		//Window Listener for Close Button
 		addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
+            	File relaunchfile = new File("relaunch.txt");
+		    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
             	newactions.removeAllComponents();
             	createfield.setText("");
             	dispose();

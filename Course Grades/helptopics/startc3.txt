@@ -1,0 +1,1 @@
+You can opt to open an existing semester by opening up a file chooser where you can select an existing folder that contains grades for an entire semester. When you select the semester you want to load, it will load that semester to the last updated class and category for it.

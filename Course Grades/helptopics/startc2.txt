@@ -1,0 +1,5 @@
+Each semester, you will want to create a new semester folder with this application. The program will ask you for categories for grade criteria one at a time for each class until you are done.
+
+You will start out with one class and keep going until you come up with n amount of categories that add up to 100%. If it adds to 100%, you will then repeat the process for your next class(es). Once you created all of your classes, it will prompt you for a filename to save your semester, and then open up the main application. The class that gets displayed will be the 1st category from the 1st class you created.
+
+Note: Currently, you cannot modify a semester in terms of both classes and categories. You will need to create a new semester and update your grades again if grading criteria changes in any of your classes.
