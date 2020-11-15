@@ -4,136 +4,136 @@ import java.io.*;
 import java.util.*;
 import javax.swing.table.*;
 
-public class guiactions {
+public class GuiActions {
 
-public static void openFiles(String filename, String firstclass, String semestertitle){
+public static void openFiles(String fileName, String firstClass, String semesterTitle){
 		
 		//Opens files for loading class information
-		appframe.combolisten = false;
+		AppFrame.comboListen = false;
 		try {
 			
 			//Open first class file
-			Scanner firstclassscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + filename + "/" + firstclass));
-			appframe.coursename.setText(firstclassscan.nextLine() + " - " + firstclassscan.nextLine());
-			appframe.scalefield.setText(firstclassscan.nextLine());
+			Scanner firstClassScan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + fileName + "/" + firstClass));
+			AppFrame.courseName.setText(firstClassScan.nextLine() + " - " + firstClassScan.nextLine());
+			AppFrame.scaleField.setText(firstClassScan.nextLine());
 			
 			//Add categories to array list and get index of most recent category
-			int recentindex = 0;
-			boolean endcheck = false;
-			while(!endcheck){
+			int recentIndex = 0;
+			boolean endCheck = false;
+			while(!endCheck){
 				
 				//Keeps creating category objects until the last line of file is detected
-				String temp = firstclassscan.nextLine();
-				if(utilities.misc.isANumber(temp)){
-					recentindex = Integer.parseInt(temp);
-					endcheck = true;
+				String temp = firstClassScan.nextLine();
+				if(utilities.Misc.isANumber(temp)){
+					recentIndex = Integer.parseInt(temp);
+					endCheck = true;
 				}//End of if
 				else {
 					String v1 = temp;
-					String v2 = firstclassscan.nextLine();
-					String v3 = firstclassscan.nextLine();
-					appframe.categorylist.add(new categoryobject(v1, v2, v3));
+					String v2 = firstClassScan.nextLine();
+					String v3 = firstClassScan.nextLine();
+					AppFrame.categoryList.add(new CategoryObject(v1, v2, v3));
 				}//End of else
 				
 			}//End of while
-			firstclassscan.close();
+			firstClassScan.close();
 			
 			//Fill GUI information for category opened and category combobox
-			appframe.weightname.setText(appframe.categorylist.get(recentindex).getName() + " - Weight: " + appframe.categorylist.get(recentindex).getWeight() + "%");
-			for(int i = 0; i < appframe.categorylist.size(); i++){
-				appframe.categorycombo.addItem(appframe.categorylist.get(i).getName());
+			AppFrame.weightName.setText(AppFrame.categoryList.get(recentIndex).getName() + " - Weight: " + AppFrame.categoryList.get(recentIndex).getWeight() + "%");
+			for(int i = 0; i < AppFrame.categoryList.size(); i++){
+				AppFrame.categoryCombo.addItem(AppFrame.categoryList.get(i).getName());
 			}//End of for
-			appframe.categorycombo.setSelectedIndex(recentindex);
+			AppFrame.categoryCombo.setSelectedIndex(recentIndex);
 			
 			///Fill GUI information for class opened and class combobox
-			int classindex = 0;
-			int selectedclass = 0;
-			boolean classcheck = true;
-			while(classcheck){
+			int classIndex = 0;
+			int selectedClass = 0;
+			boolean classCheck = true;
+			while(classCheck){
 				
 				//Check all class files and record current class for class combo
 				try {
-					Scanner classcomboscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + filename + "/class" + (classindex+1) + ".txt"));
-					String s1 = classcomboscan.nextLine();
-					String s2 = classcomboscan.nextLine();
-					appframe.classcombo.addItem(s1);
-					if((s1 + " - " + s2).equals(appframe.coursename.getText())){
-						selectedclass = appframe.classcombo.getItemCount()-1;
+					Scanner classComboScan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + fileName + "/class" + (classIndex+1) + ".txt"));
+					String s1 = classComboScan.nextLine();
+					String s2 = classComboScan.nextLine();
+					AppFrame.classCombo.addItem(s1);
+					if((s1 + " - " + s2).equals(AppFrame.courseName.getText())){
+						selectedClass = AppFrame.classCombo.getItemCount()-1;
 					}//End of if
-					classindex++;
-					classcomboscan.close();
+					classIndex++;
+					classComboScan.close();
 				} catch (Exception e){
-					classcheck = false;
+					classCheck = false;
 				}//End of try catch
 				
 			}//End of while
-			appframe.classcombo.setSelectedIndex(selectedclass);
+			AppFrame.classCombo.setSelectedIndex(selectedClass);
 			
 			//Load current class and calculate values for current category
-			frameactions.addCurrentClass(appframe.categorylist.get(recentindex).getFilepath());
-			frameactions.loadCategoryValues(Double.parseDouble(appframe.categorylist.get(recentindex).getWeight()));
+			FrameActions.addCurrentClass(AppFrame.categoryList.get(recentIndex).getFilePath());
+			FrameActions.loadCategoryValues(Double.parseDouble(AppFrame.categoryList.get(recentIndex).getWeight()));
 			
 			//Calculate overall average grade
-			String overallgrade = frameactions.loadOverallGrade(recentindex);
-			DefaultTableModel valuemodel = (DefaultTableModel) appframe.valuetable.getModel();
-			valuemodel.setValueAt(overallgrade, 0, 2);
+			String overallGrade = FrameActions.loadOverallGrade(recentIndex);
+			DefaultTableModel valueModel = (DefaultTableModel) AppFrame.valueTable.getModel();
+			valueModel.setValueAt(overallGrade, 0, 2);
 			
 			//If overall average is determined, set best and worst grade fields as N/A, otherwise calculate them
-			if(valuemodel.getValueAt(0, 2).toString().equals("N/A")){
-				valuemodel.setValueAt(frameactions.loadBestGrade(recentindex), 1, 2);
-				valuemodel.setValueAt(frameactions.loadWorstGrade(recentindex), 2, 2);
-				appframe.needbutton.setEnabled(true);
+			if(valueModel.getValueAt(0, 2).toString().equals("N/A")){
+				valueModel.setValueAt(FrameActions.loadBestGrade(recentIndex), 1, 2);
+				valueModel.setValueAt(FrameActions.loadWorstGrade(recentIndex), 2, 2);
+				AppFrame.needButton.setEnabled(true);
 			}//End of if
 			else{
-				valuemodel.setValueAt("N/A", 1, 2);
-				valuemodel.setValueAt("N/A", 2, 2);
-				appframe.needbutton.setEnabled(false);
+				valueModel.setValueAt("N/A", 1, 2);
+				valueModel.setValueAt("N/A", 2, 2);
+				AppFrame.needButton.setEnabled(false);
 			}//End of else
 			
 			//Rewrite file for opening recent semester quickly
 			FileWriter fw = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-			fw.write(filename + "\n");
-			fw.write(semestertitle + "\n");
-			fw.write("" + appframe.quickcheck.isSelected());
+			fw.write(fileName + "\n");
+			fw.write(semesterTitle + "\n");
+			fw.write("" + AppFrame.quickCheck.isSelected());
 			fw.close();
 			
-			appframe.prevcategory = appframe.categorycombo.getSelectedIndex();
-			appframe.prevclass = appframe.classcombo.getSelectedIndex();
-			switchClass(appframe.classcombo.getSelectedIndex(), filename);
+			AppFrame.prevCategory = AppFrame.categoryCombo.getSelectedIndex();
+			AppFrame.prevClass = AppFrame.classCombo.getSelectedIndex();
+			switchClass(AppFrame.classCombo.getSelectedIndex(), fileName);
 			
 			//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
-			DefaultTableModel gradesmodel = (DefaultTableModel) appframe.gradestable.getModel();
-			appframe.lasttable = new String[gradesmodel.getRowCount()][3];
-			for(int i = 0; i < appframe.lasttable.length; i++) {
-				appframe.lasttable[i][0] = gradesmodel.getValueAt(i, 1).toString();
-				appframe.lasttable[i][1] = gradesmodel.getValueAt(i, 2).toString();
-				appframe.lasttable[i][2] = gradesmodel.getValueAt(i, 3).toString();
+			DefaultTableModel gradesModel = (DefaultTableModel) AppFrame.gradesTable.getModel();
+			AppFrame.lastTable = new String[gradesModel.getRowCount()][3];
+			for(int i = 0; i < AppFrame.lastTable.length; i++) {
+				AppFrame.lastTable[i][0] = gradesModel.getValueAt(i, 1).toString();
+				AppFrame.lastTable[i][1] = gradesModel.getValueAt(i, 2).toString();
+				AppFrame.lastTable[i][2] = gradesModel.getValueAt(i, 3).toString();
 			}//End of for
-			appframe.lastscale = appframe.scalefield.getText();
-			appframe.lastquick = appframe.quickcheck.isSelected();
+			AppFrame.lastScale = AppFrame.scaleField.getText();
+			AppFrame.lastQuick = AppFrame.quickCheck.isSelected();
 			
 		} catch (Exception e) {
-			utilities.misc.errorMessage("Can't open semester files! Closing application.");
+			utilities.Misc.errorMessage("Can't open semester files! Closing application.");
 			System.exit(0);
 		}//End of try catch
-		appframe.combolisten = true;
+		AppFrame.comboListen = true;
 		
 	}//End of openFiles
 	
 	public static void clearGUI() {
 		
 		//Clear both table rows and both comboboxes
-		appframe.combolisten = false;
-		frameactions.removeAllRows();
-		int categorycount = appframe.categorycombo.getItemCount();
-		for(int i = 0; i < categorycount; i++){
-			appframe.categorycombo.removeItemAt(0);
+		AppFrame.comboListen = false;
+		FrameActions.removeAllRows();
+		int categoryCount = AppFrame.categoryCombo.getItemCount();
+		for(int i = 0; i < categoryCount; i++){
+			AppFrame.categoryCombo.removeItemAt(0);
 		}//End of for
-		int classcount = appframe.classcombo.getItemCount();
-		for(int i = 0; i < classcount; i++){
-			appframe.classcombo.removeItemAt(0);
+		int classCount = AppFrame.classCombo.getItemCount();
+		for(int i = 0; i < classCount; i++){
+			AppFrame.classCombo.removeItemAt(0);
 		}//End of for
-		appframe.combolisten = true;
+		AppFrame.comboListen = true;
 		
 	}//End of clearGUI
 	
@@ -144,116 +144,116 @@ public static void openFiles(String filename, String firstclass, String semester
 	public static void switchCategory(int index){
 		
 		//Switch category title and grades table to current selected category
-		appframe.weightname.setText(appframe.categorylist.get(index).getName() + " - Weight: " + appframe.categorylist.get(index).getWeight() + "%");
+		AppFrame.weightName.setText(AppFrame.categoryList.get(index).getName() + " - Weight: " + AppFrame.categoryList.get(index).getWeight() + "%");
 		
 		//Load current class and calculate values for current category
-		frameactions.removeAllRows();
-		frameactions.addCurrentClass(appframe.categorylist.get(index).getFilepath());
-		frameactions.loadCategoryValues(Double.parseDouble(appframe.categorylist.get(index).getWeight()));
-		appframe.prevcategory = appframe.categorycombo.getSelectedIndex();
+		FrameActions.removeAllRows();
+		FrameActions.addCurrentClass(AppFrame.categoryList.get(index).getFilePath());
+		FrameActions.loadCategoryValues(Double.parseDouble(AppFrame.categoryList.get(index).getWeight()));
+		AppFrame.prevCategory = AppFrame.categoryCombo.getSelectedIndex();
 		
 		//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
-		DefaultTableModel gradesmodel = (DefaultTableModel) appframe.gradestable.getModel();
-		appframe.lasttable = new String[gradesmodel.getRowCount()][3];
-		for(int i = 0; i < appframe.lasttable.length; i++) {
-			appframe.lasttable[i][0] = gradesmodel.getValueAt(i, 1).toString();
-			appframe.lasttable[i][1] = gradesmodel.getValueAt(i, 2).toString();
-			appframe.lasttable[i][2] = gradesmodel.getValueAt(i, 3).toString();
+		DefaultTableModel gradesModel = (DefaultTableModel) AppFrame.gradesTable.getModel();
+		AppFrame.lastTable = new String[gradesModel.getRowCount()][3];
+		for(int i = 0; i < AppFrame.lastTable.length; i++) {
+			AppFrame.lastTable[i][0] = gradesModel.getValueAt(i, 1).toString();
+			AppFrame.lastTable[i][1] = gradesModel.getValueAt(i, 2).toString();
+			AppFrame.lastTable[i][2] = gradesModel.getValueAt(i, 3).toString();
 		}//End of for
-		appframe.lastscale = appframe.scalefield.getText();
-		appframe.lastquick = appframe.quickcheck.isSelected();
+		AppFrame.lastScale = AppFrame.scaleField.getText();
+		AppFrame.lastQuick = AppFrame.quickCheck.isSelected();
 		
 	}//End of switchCategory
 	
-	public static void switchClass(int index, String filename){
+	public static void switchClass(int index, String fileName){
 		
 		//Switch category title and grades table to current selected category
-		appframe.combolisten = false;
+		AppFrame.comboListen = false;
 		try {
 			
 			//Scan for class title
-			Scanner classscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + filename + "/class" + (index+1) + ".txt"));
-			appframe.coursename.setText(classscan.nextLine() + " - " + classscan.nextLine());
-			appframe.scalefield.setText(classscan.nextLine());
+			Scanner classScan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + fileName + "/class" + (index+1) + ".txt"));
+			AppFrame.courseName.setText(classScan.nextLine() + " - " + classScan.nextLine());
+			AppFrame.scaleField.setText(classScan.nextLine());
 			
 			//Remove categories from last class
-			int combocount = appframe.categorycombo.getItemCount();
-			for(int i = 0; i < combocount-1; i++){
-				appframe.categorycombo.removeItemAt(0);
+			int comboCount = AppFrame.categoryCombo.getItemCount();
+			for(int i = 0; i < comboCount-1; i++){
+				AppFrame.categoryCombo.removeItemAt(0);
 			}
-			for(int i = appframe.categorylist.size()-1; i >= 0; i--){
-				appframe.categorylist.remove(i);
+			for(int i = AppFrame.categoryList.size()-1; i >= 0; i--){
+				AppFrame.categoryList.remove(i);
 			}//End of for
 			
 			//Add categories to array list and get index of most recent category
-			int recentindex = 0;
-			boolean endcheck = false;
-			while(!endcheck){
+			int recentIndex = 0;
+			boolean endCheck = false;
+			while(!endCheck){
 				
 				//Keeps creating category objects until the last line of file is detected
-				String temp = classscan.nextLine();
-				if(utilities.misc.isANumber(temp)){
-					recentindex = Integer.parseInt(temp);
-					endcheck = true;
+				String temp = classScan.nextLine();
+				if(utilities.Misc.isANumber(temp)){
+					recentIndex = Integer.parseInt(temp);
+					endCheck = true;
 				}//End of if
 				else {
 					String v1 = temp;
-					String v2 = classscan.nextLine();
-					String v3 = classscan.nextLine();
-					appframe.categorylist.add(new categoryobject(v1, v2, v3));
+					String v2 = classScan.nextLine();
+					String v3 = classScan.nextLine();
+					AppFrame.categoryList.add(new CategoryObject(v1, v2, v3));
 				}//End of else
 				
 			}//End of while
-			classscan.close();
+			classScan.close();
 			
 			//Fill GUI information for category opened and category combobox
-			appframe.weightname.setText(appframe.categorylist.get(recentindex).getName() + " - Weight: " + appframe.categorylist.get(recentindex).getWeight() + "%");
-			for(int i = 0; i < appframe.categorylist.size(); i++){
-				appframe.categorycombo.addItem(appframe.categorylist.get(i).getName());
+			AppFrame.weightName.setText(AppFrame.categoryList.get(recentIndex).getName() + " - Weight: " + AppFrame.categoryList.get(recentIndex).getWeight() + "%");
+			for(int i = 0; i < AppFrame.categoryList.size(); i++){
+				AppFrame.categoryCombo.addItem(AppFrame.categoryList.get(i).getName());
 			}//End of for
-			appframe.categorycombo.removeItemAt(0);
-			appframe.categorycombo.setSelectedIndex(recentindex);
+			AppFrame.categoryCombo.removeItemAt(0);
+			AppFrame.categoryCombo.setSelectedIndex(recentIndex);
 			
 			//Load current class and calculate values for current category
-			frameactions.removeAllRows();
-			frameactions.addCurrentClass(appframe.categorylist.get(recentindex).getFilepath());
-			frameactions.loadCategoryValues(Double.parseDouble(appframe.categorylist.get(recentindex).getWeight()));
+			FrameActions.removeAllRows();
+			FrameActions.addCurrentClass(AppFrame.categoryList.get(recentIndex).getFilePath());
+			FrameActions.loadCategoryValues(Double.parseDouble(AppFrame.categoryList.get(recentIndex).getWeight()));
 			
 			//Calculate overall average grade
-			String overallgrade = frameactions.loadOverallGrade(recentindex);
-			DefaultTableModel valuemodel = (DefaultTableModel) appframe.valuetable.getModel();
-			valuemodel.setValueAt(overallgrade, 0, 2);
+			String overallGrade = FrameActions.loadOverallGrade(recentIndex);
+			DefaultTableModel valueModel = (DefaultTableModel) AppFrame.valueTable.getModel();
+			valueModel.setValueAt(overallGrade, 0, 2);
 			
 			//If overall average is determined, set best and worst grade fields as N/A, otherwise calculate them
-			if(valuemodel.getValueAt(0, 2).toString().equals("N/A")){
-				valuemodel.setValueAt(frameactions.loadBestGrade(recentindex), 1, 2);
-				valuemodel.setValueAt(frameactions.loadWorstGrade(recentindex), 2, 2);
-				appframe.needbutton.setEnabled(true);
+			if(valueModel.getValueAt(0, 2).toString().equals("N/A")){
+				valueModel.setValueAt(FrameActions.loadBestGrade(recentIndex), 1, 2);
+				valueModel.setValueAt(FrameActions.loadWorstGrade(recentIndex), 2, 2);
+				AppFrame.needButton.setEnabled(true);
 			}//End of if
 			else{
-				valuemodel.setValueAt("N/A", 1, 2);
-				valuemodel.setValueAt("N/A", 2, 2);
-				appframe.needbutton.setEnabled(false);
+				valueModel.setValueAt("N/A", 1, 2);
+				valueModel.setValueAt("N/A", 2, 2);
+				AppFrame.needButton.setEnabled(false);
 			}//End of else
-			appframe.prevcategory = appframe.categorycombo.getSelectedIndex();
-			appframe.prevclass = appframe.classcombo.getSelectedIndex();
+			AppFrame.prevCategory = AppFrame.categoryCombo.getSelectedIndex();
+			AppFrame.prevClass = AppFrame.classCombo.getSelectedIndex();
 			
 			//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
-			DefaultTableModel gradesmodel = (DefaultTableModel) appframe.gradestable.getModel();
-			appframe.lasttable = new String[gradesmodel.getRowCount()][3];
-			for(int i = 0; i < appframe.lasttable.length; i++) {
-				appframe.lasttable[i][0] = gradesmodel.getValueAt(i, 1).toString();
-				appframe.lasttable[i][1] = gradesmodel.getValueAt(i, 2).toString();
-				appframe.lasttable[i][2] = gradesmodel.getValueAt(i, 3).toString();
+			DefaultTableModel gradesModel = (DefaultTableModel) AppFrame.gradesTable.getModel();
+			AppFrame.lastTable = new String[gradesModel.getRowCount()][3];
+			for(int i = 0; i < AppFrame.lastTable.length; i++) {
+				AppFrame.lastTable[i][0] = gradesModel.getValueAt(i, 1).toString();
+				AppFrame.lastTable[i][1] = gradesModel.getValueAt(i, 2).toString();
+				AppFrame.lastTable[i][2] = gradesModel.getValueAt(i, 3).toString();
 			}//End of for
-			appframe.lastscale = appframe.scalefield.getText();
-			appframe.lastquick = appframe.quickcheck.isSelected();
+			AppFrame.lastScale = AppFrame.scaleField.getText();
+			AppFrame.lastQuick = AppFrame.quickCheck.isSelected();
 			
 		} catch (FileNotFoundException e) {
 			
 		}//End of try catch
-		appframe.combolisten = true;
+		AppFrame.comboListen = true;
 		
 	}//End of switchClass
 	
-}//End of guiactions
+}//End of GuiActions

@@ -5,9 +5,9 @@ import java.awt.event.*;
 import java.net.*;
 import javax.swing.*;
 
-public class aboutframe extends JDialog{
+public class AboutFrame extends JDialog{
 
-	public aboutframe(){
+	public AboutFrame(){
 		
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -24,79 +24,79 @@ public class aboutframe extends JDialog{
 		
 		//Components
 		Container pane = getContentPane();
-		Box labelsbox = Box.createVerticalBox();
-		JLabel accountlabel = new JLabel("This project was created by cgibbs98:");
-		JLabel accountlink = new JLabel("Github Profile");
-		accountlink.setToolTipText("https://github.com/cgibbs98");
-		JLabel projectlabel = new JLabel("View project repository/source code and licensing below:");
-		JLabel projectlink = new JLabel("Github Link");
-		projectlink.setToolTipText("https://github.com/cgibbs98/Semester-Grade-Manager-Application");
+		Box labelsBox = Box.createVerticalBox();
+		JLabel accountLabel = new JLabel("This project was created by cgibbs98:");
+		JLabel accountLink = new JLabel("Github Profile");
+		accountLink.setToolTipText("https://github.com/cgibbs98");
+		JLabel projectLabel = new JLabel("View project repository/source code and licensing below:");
+		JLabel projectLink = new JLabel("Github Link");
+		projectLink.setToolTipText("https://github.com/cgibbs98/Semester-Grade-Manager-Application");
 		
 		//Create hyperlinks (Tutorial at https://www.codejava.net/java-se/swing/how-to-create-hyperlink-with-jlabel-in-java-swing)
-		accountlink.setForeground(Color.BLUE.darker());
-		accountlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		accountlink.addMouseListener(new MouseAdapter() {
+		accountLink.setForeground(Color.BLUE.darker());
+		accountLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		accountLink.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
                try {
             	   Desktop.getDesktop().browse(new URI("https://github.com/cgibbs98"));
                }catch (Exception e){
-            	   utilities.misc.errorMessage("An error has occured. Please try again later.");
+            	   utilities.Misc.errorMessage("An error has occured. Please try again later.");
                }
             }
             @Override
             public void mouseExited(MouseEvent me) {
-            	accountlink.setText(accountlink.getText());
+            	accountLink.setText(accountLink.getText());
             }
             @Override
             public void mouseEntered(MouseEvent me) {
-            	accountlink.setText("<html><a href=''>" + accountlink.getText() + "</a></html>");
+            	accountLink.setText("<html><a href=''>" + accountLink.getText() + "</a></html>");
             }
         });
-		projectlink.setForeground(Color.BLUE.darker());
-		projectlink.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		projectlink.addMouseListener(new MouseAdapter() {
+		projectLink.setForeground(Color.BLUE.darker());
+		projectLink.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		projectLink.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent me) {
                try {
             	   Desktop.getDesktop().browse(new URI("https://github.com/cgibbs98/Semester-Grade-Manager-Application"));
                }catch (Exception e){
-            	   utilities.misc.errorMessage("An error has occured. Please try again later.");
+            	   utilities.Misc.errorMessage("An error has occured. Please try again later.");
                }
             }
             @Override
             public void mouseExited(MouseEvent me) {
-            	projectlink.setText(projectlink.getText());
+            	projectLink.setText(projectLink.getText());
             }
             @Override
             public void mouseEntered(MouseEvent me) {
-            	projectlink.setText("<html><a href=''>" + projectlink.getText() + "</a></html>");
+            	projectLink.setText("<html><a href=''>" + projectLink.getText() + "</a></html>");
             }
         });
 		
 		//Create panels to center JLabels
 		JPanel panel1 = new JPanel();
-		panel1.add(accountlabel);
+		panel1.add(accountLabel);
 		JPanel panel2 = new JPanel();
-		panel2.add(accountlink);
+		panel2.add(accountLink);
 		JPanel panel3 = new JPanel();
-		panel3.add(projectlabel);
+		panel3.add(projectLabel);
 		JPanel panel4 = new JPanel();
-		panel4.add(projectlink);
-		labelsbox.add(panel1);
-		labelsbox.add(panel2);
-		labelsbox.add(panel3);
-		labelsbox.add(panel4);
-		pane.add(labelsbox, BorderLayout.NORTH);
+		panel4.add(projectLink);
+		labelsBox.add(panel1);
+		labelsBox.add(panel2);
+		labelsBox.add(panel3);
+		labelsBox.add(panel4);
+		pane.add(labelsBox, BorderLayout.NORTH);
 		
 		//Close button
-		JPanel buttonpanel = new JPanel();
-		JButton closebutton = new JButton("Close Window");
-		buttonpanel.add(closebutton);
-		pane.add(buttonpanel, BorderLayout.SOUTH);
+		JPanel buttonPanel = new JPanel();
+		JButton closeButton = new JButton("Close Window");
+		buttonPanel.add(closeButton);
+		pane.add(buttonPanel, BorderLayout.SOUTH);
 		
 		//Action Listeners
-		closebutton.addActionListener(new ActionListener(){  
+		closeButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				dispose();
 			}  
@@ -109,14 +109,14 @@ public class aboutframe extends JDialog{
 			}
 		});
 		
-	}//End of aboutframe
+	}//End of AboutFrame
 	
 	public static void main(String[] args) {
 		
 		//Launch new instance of frame
-		aboutframe frame = new aboutframe();
+		AboutFrame frame = new AboutFrame();
 		frame.setVisible(true);
 
 	}//End of main
 
-}//End of aboutframe
+}//End of AboutFrame

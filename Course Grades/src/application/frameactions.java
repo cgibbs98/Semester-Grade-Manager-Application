@@ -4,11 +4,11 @@ import java.io.*;
 import java.util.*;
 import javax.swing.table.*;
 
-public class frameactions extends appframe{
+public class FrameActions extends AppFrame{
 
-	public frameactions(String filename, boolean quickcheckvalue) {
-		super(filename, quickcheckvalue);
-	}//End of frmeactions
+	public FrameActions(String fileName, boolean quickCheckValue) {
+		super(fileName, quickCheckValue);
+	}//End of FrameActions
 
 	
 	
@@ -17,23 +17,23 @@ public class frameactions extends appframe{
 	public static void addGrade(String s1, String s2, String s3){
 		
 		//Adds row to table
-		DefaultTableModel model = (DefaultTableModel) gradestable.getModel();
-		model.addRow(new Object[]{gradestable.getRowCount()+1, s1, s2, s3});
+		DefaultTableModel model = (DefaultTableModel) gradesTable.getModel();
+		model.addRow(new Object[]{gradesTable.getRowCount()+1, s1, s2, s3});
 		
 	}//End of addGrade
 	
 	public static void addEmptyGrade(){
 		
 		//Adds row to table
-		DefaultTableModel model = (DefaultTableModel) gradestable.getModel();
-		model.addRow(new Object[]{gradestable.getRowCount()+1, "", "", ""});
+		DefaultTableModel model = (DefaultTableModel) gradesTable.getModel();
+		model.addRow(new Object[]{gradesTable.getRowCount()+1, "", "", ""});
 		
 	}//End of addEmptyGrade
 	
 	public static void removeAllRows(){
 		
 		//Removes all rows from table
-		DefaultTableModel model = (DefaultTableModel) gradestable.getModel();
+		DefaultTableModel model = (DefaultTableModel) gradesTable.getModel();
 		for(int i = model.getRowCount()-1; i >= 0; i--){
 			model.removeRow(i);
 		}//End of for
@@ -43,7 +43,7 @@ public class frameactions extends appframe{
 	public static void removeGrades(){
 		
 		//Removes all empty rows from table
-		DefaultTableModel model = (DefaultTableModel) gradestable.getModel();
+		DefaultTableModel model = (DefaultTableModel) gradesTable.getModel();
 		for(int i = model.getRowCount()-1; i >= 0; i--){
 			if(model.getValueAt(i, 1).equals("") && model.getValueAt(i, 2).equals("") && model.getValueAt(i, 3).equals("")){
 				model.removeRow(i);
@@ -60,15 +60,15 @@ public class frameactions extends appframe{
 	public static void loadCategoryValues(double weight){
 		
 		//Calculates current stats for table
-		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
-		DefaultTableModel valuemodel = (DefaultTableModel) valuetable.getModel();
+		DefaultTableModel gradesModel = (DefaultTableModel) gradesTable.getModel();
+		DefaultTableModel valueModel = (DefaultTableModel) valueTable.getModel();
 		
 		//Set N/A to category fields if no rows exist
-		if(gradesmodel.getRowCount() == 0){
-			valuemodel.setValueAt("N/A", 3, 2);
-			valuemodel.setValueAt("N/A", 4, 2);
-			valuemodel.setValueAt("N/A", 5, 2);
-			valuemodel.setValueAt("N/A", 6, 2);
+		if(gradesModel.getRowCount() == 0){
+			valueModel.setValueAt("N/A", 3, 2);
+			valueModel.setValueAt("N/A", 4, 2);
+			valueModel.setValueAt("N/A", 5, 2);
+			valueModel.setValueAt("N/A", 6, 2);
 		}//End of if
 		
 		//Calculate values based on table values
@@ -77,88 +77,88 @@ public class frameactions extends appframe{
 			//Loop through table to get values
 			double earned = 0.0;
 			double possible = 0.0;
-			for(int i = 0; i < gradesmodel.getRowCount(); i++){
-				earned += Double.parseDouble(gradesmodel.getValueAt(i, 2).toString());
-				possible += Double.parseDouble(gradesmodel.getValueAt(i, 3).toString());
+			for(int i = 0; i < gradesModel.getRowCount(); i++){
+				earned += Double.parseDouble(gradesModel.getValueAt(i, 2).toString());
+				possible += Double.parseDouble(gradesModel.getValueAt(i, 3).toString());
 			}//End of for
 			double percent = earned/possible;
 			double weighted = percent*weight;
 			
 			//Set category fields to respective values
-			valuemodel.setValueAt(earned, 3, 2);
-			valuemodel.setValueAt(possible, 4, 2);
-			valuemodel.setValueAt(percent*100, 5, 2);
-			valuemodel.setValueAt(weighted, 6, 2);
+			valueModel.setValueAt(earned, 3, 2);
+			valueModel.setValueAt(possible, 4, 2);
+			valueModel.setValueAt(percent*100, 5, 2);
+			valueModel.setValueAt(weighted, 6, 2);
 			
 		}//End of else
 		
 	}//End of loadCategoryValues
 	
-	public static void addCurrentClass(String filepath){
+	public static void addCurrentClass(String filePath){
 		
 		//Load grades for current class
 		try {
-			Scanner filltablescan = new Scanner(new File(filepath));
-			while(filltablescan.hasNext()){
-				String[] graderow = filltablescan.nextLine().split(",");
-				frameactions.addGrade(graderow[0], graderow[1], graderow[2]);
+			Scanner fillTableScan = new Scanner(new File(filePath));
+			while(fillTableScan.hasNext()){
+				String[] gradeRow = fillTableScan.nextLine().split(",");
+				FrameActions.addGrade(gradeRow[0], gradeRow[1], gradeRow[2]);
 			}//End of while
-			filltablescan.close();
+			fillTableScan.close();
 		} catch (Exception e) {
 			
 		}//End of try catch
 		
 	}//End of addCurrentClass
 	
-	public static void save(int categoryid, int classid){
+	public static void save(int categoryId, int classId){
 		
 		//Checks to make sure no empty fields including extra credit/scale field will be written existing file and that total points possible isn't 0
-		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
+		DefaultTableModel gradesModel = (DefaultTableModel) gradesTable.getModel();
 		double total = 0.0;
-		for(int i = 0; i < gradesmodel.getRowCount(); i++){
-			if( gradesmodel.getValueAt(i, 1).equals("") || gradesmodel.getValueAt(i, 2).equals("") || gradesmodel.getValueAt(i, 3).equals("") || 
-			!(utilities.misc.isANumber(gradesmodel.getValueAt(i, 2).toString())) || !(utilities.misc.isANumber(gradesmodel.getValueAt(i, 3).toString())) ){
-				utilities.misc.errorMessage("Can't save grades! Blank field in grades table detected or points field is not a number.");
+		for(int i = 0; i < gradesModel.getRowCount(); i++){
+			if( gradesModel.getValueAt(i, 1).equals("") || gradesModel.getValueAt(i, 2).equals("") || gradesModel.getValueAt(i, 3).equals("") || 
+			!(utilities.Misc.isANumber(gradesModel.getValueAt(i, 2).toString())) || !(utilities.Misc.isANumber(gradesModel.getValueAt(i, 3).toString())) ){
+				utilities.Misc.errorMessage("Can't save grades! Blank field in grades table detected or points field is not a number.");
 				return;
 			}//End of if
-			total += Double.parseDouble(gradesmodel.getValueAt(i, 3).toString());
+			total += Double.parseDouble(gradesModel.getValueAt(i, 3).toString());
 		}//End of for
-		if( !(utilities.misc.isANumber(scalefield.getText())) ){
-			utilities.misc.errorMessage("Can't save grades! Extra Credit/Scale field is blank or not a number.");
+		if( !(utilities.Misc.isANumber(scaleField.getText())) ){
+			utilities.Misc.errorMessage("Can't save grades! Extra Credit/Scale field is blank or not a number.");
 			return;
 		}//End of if
 		if(total <= 0){
-			utilities.misc.errorMessage("Can't save grades! Points possible must not be 0 or a negative value.");
+			utilities.Misc.errorMessage("Can't save grades! Points possible must not be 0 or a negative value.");
 			return;
 		}//End of if
 		
 		//Writes updated table to existing category file
 		try {
-			FileWriter categoryscanner = new FileWriter(new File(categorylist.get(categoryid).getFilepath()));
-			for(int i = 0; i < gradesmodel.getRowCount(); i++){
-				categoryscanner.write(gradesmodel.getValueAt(i, 1) + "," + gradesmodel.getValueAt(i, 2) + "," + gradesmodel.getValueAt(i, 3));
-				if(i != gradesmodel.getRowCount()-1){
-					categoryscanner.write("\n");
+			FileWriter categoryScanner = new FileWriter(new File(categoryList.get(categoryId).getFilePath()));
+			for(int i = 0; i < gradesModel.getRowCount(); i++){
+				categoryScanner.write(gradesModel.getValueAt(i, 1) + "," + gradesModel.getValueAt(i, 2) + "," + gradesModel.getValueAt(i, 3));
+				if(i != gradesModel.getRowCount()-1){
+					categoryScanner.write("\n");
 				}//End of if
 			}//End of for
-			categoryscanner.close();
+			categoryScanner.close();
 		} catch (IOException e) {
 			
 		}//End of try catch
 		
 		//Updates quicklaunch file to determine whether the launch window can be used or not
-		String quicksemester = "";
-		String quicktitle = "";
+		String quickSemester = "";
+		String quickTitle = "";
 		try {
-			Scanner quickscan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-			quicksemester = quickscan.nextLine();
-			quicktitle = quickscan.nextLine();
-			quickscan.close();
-			FileWriter quickwrite = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-			quickwrite.write(quicksemester + "\n");
-			quickwrite.write(quicktitle + "\n");
-			quickwrite.write("" + appframe.quickcheck.isSelected());
-			quickwrite.close();
+			Scanner quickScan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+			quickSemester = quickScan.nextLine();
+			quickTitle = quickScan.nextLine();
+			quickScan.close();
+			FileWriter quickWrite = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+			quickWrite.write(quickSemester + "\n");
+			quickWrite.write(quickTitle + "\n");
+			quickWrite.write("" + AppFrame.quickCheck.isSelected());
+			quickWrite.close();
 		} catch (Exception e) {
 			
 		}//End of try catch
@@ -167,29 +167,29 @@ public class frameactions extends appframe{
 		try {
 			
 			//Master file
-			String classfile = "class" + (classid+1) + ".txt";
-			FileWriter masterwrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/master.txt"));
-			masterwrite.write(quicktitle + "\n");
-			masterwrite.write(classfile);
-			masterwrite.close();
+			String classFile = "class" + (classId+1) + ".txt";
+			FileWriter masterWrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quickSemester + "/master.txt"));
+			masterWrite.write(quickTitle + "\n");
+			masterWrite.write(classFile);
+			masterWrite.close();
 			
 			//Class file
-			ArrayList<String> classlines = new ArrayList();
-			Scanner classscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/" + classfile));
-			while(classscan.hasNext()){
-				classlines.add(classscan.nextLine());
+			ArrayList<String> classLines = new ArrayList();
+			Scanner classScan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + quickSemester + "/" + classFile));
+			while(classScan.hasNext()){
+				classLines.add(classScan.nextLine());
 			}//End of while
-			classscan.close();
-			classlines.set(2, scalefield.getText());
-			classlines.set((classlines.size()-1), "" + categoryid);
-			FileWriter classwrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/" + classfile));
-			for(int i = 0; i < classlines.size(); i++){
-				classwrite.write(classlines.get(i));
-				if(i != classlines.size()-1){
-					classwrite.write("\n");
+			classScan.close();
+			classLines.set(2, scaleField.getText());
+			classLines.set((classLines.size()-1), "" + categoryId);
+			FileWriter classWrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quickSemester + "/" + classFile));
+			for(int i = 0; i < classLines.size(); i++){
+				classWrite.write(classLines.get(i));
+				if(i != classLines.size()-1){
+					classWrite.write("\n");
 				}//End of if
 			}//End of for
-			classwrite.close();
+			classWrite.close();
 			
 		} catch (Exception e) {
 			
@@ -202,70 +202,70 @@ public class frameactions extends appframe{
 	public static void updateAndSave(){
 		
 		//Checks to make sure no empty fields including extra credit/scale field will be written existing file and that total points possible isn't 0
-		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
+		DefaultTableModel gradesModel = (DefaultTableModel) gradesTable.getModel();
 		double total = 0.0;
-		for(int i = 0; i < gradesmodel.getRowCount(); i++){
-			if( gradesmodel.getValueAt(i, 1).equals("") || gradesmodel.getValueAt(i, 2).equals("") || gradesmodel.getValueAt(i, 3).equals("") || 
-			!(utilities.misc.isANumber(gradesmodel.getValueAt(i, 2).toString())) || !(utilities.misc.isANumber(gradesmodel.getValueAt(i, 3).toString())) ){
-				utilities.misc.errorMessage("Can't update and save grades! Blank field in grades table detected or points field is not a number.");
+		for(int i = 0; i < gradesModel.getRowCount(); i++){
+			if( gradesModel.getValueAt(i, 1).equals("") || gradesModel.getValueAt(i, 2).equals("") || gradesModel.getValueAt(i, 3).equals("") || 
+			!(utilities.Misc.isANumber(gradesModel.getValueAt(i, 2).toString())) || !(utilities.Misc.isANumber(gradesModel.getValueAt(i, 3).toString())) ){
+				utilities.Misc.errorMessage("Can't update and save grades! Blank field in grades table detected or points field is not a number.");
 				return;
 			}//End of if
-			total += Double.parseDouble(gradesmodel.getValueAt(i, 3).toString());
+			total += Double.parseDouble(gradesModel.getValueAt(i, 3).toString());
 		}//End of for
-		if( !(utilities.misc.isANumber(scalefield.getText())) ){
-			utilities.misc.errorMessage("Can't update and save grades! Extra Credit/Scale field is blank or not a number.");
+		if( !(utilities.Misc.isANumber(scaleField.getText())) ){
+			utilities.Misc.errorMessage("Can't update and save grades! Extra Credit/Scale field is blank or not a number.");
 			return;
 		}//End of if
 		if(total <= 0){
-			utilities.misc.errorMessage("Can't update and save grades! Points possible must not be 0 or a negative value.");
+			utilities.Misc.errorMessage("Can't update and save grades! Points possible must not be 0 or a negative value.");
 			return;
 		}//End of if
 		
 		//Updates grade
-		loadCategoryValues(Double.parseDouble(categorylist.get(categorycombo.getSelectedIndex()).getWeight()));
-		String overallgrade = loadOverallGrade(categorycombo.getSelectedIndex());
-		DefaultTableModel valuemodel = (DefaultTableModel) valuetable.getModel();
-		valuemodel.setValueAt(overallgrade, 0, 2);
+		loadCategoryValues(Double.parseDouble(categoryList.get(categoryCombo.getSelectedIndex()).getWeight()));
+		String overallGrade = loadOverallGrade(categoryCombo.getSelectedIndex());
+		DefaultTableModel valueModel = (DefaultTableModel) valueTable.getModel();
+		valueModel.setValueAt(overallGrade, 0, 2);
 		
 		//If overall average is determined, set best and worst grade fields as N/A, otherwise calculate them
-		if(valuemodel.getValueAt(0, 2).toString().equals("N/A")){
-			valuemodel.setValueAt(frameactions.loadBestGrade(categorycombo.getSelectedIndex()), 1, 2);
-			valuemodel.setValueAt(frameactions.loadWorstGrade(categorycombo.getSelectedIndex()), 2, 2);
-			needbutton.setEnabled(true);
+		if(valueModel.getValueAt(0, 2).toString().equals("N/A")){
+			valueModel.setValueAt(FrameActions.loadBestGrade(categoryCombo.getSelectedIndex()), 1, 2);
+			valueModel.setValueAt(FrameActions.loadWorstGrade(categoryCombo.getSelectedIndex()), 2, 2);
+			needButton.setEnabled(true);
 		}//End of if
 		else{
-			valuemodel.setValueAt("N/A", 1, 2);
-			valuemodel.setValueAt("N/A", 2, 2);
-			needbutton.setEnabled(false);
+			valueModel.setValueAt("N/A", 1, 2);
+			valueModel.setValueAt("N/A", 2, 2);
+			needButton.setEnabled(false);
 		}//End of else
 		
 		//Writes updated table to existing category file
 		try {
-			FileWriter categoryscanner = new FileWriter(new File(categorylist.get(categorycombo.getSelectedIndex()).getFilepath()));
-			for(int i = 0; i < gradesmodel.getRowCount(); i++){
-				categoryscanner.write(gradesmodel.getValueAt(i, 1) + "," + gradesmodel.getValueAt(i, 2) + "," + gradesmodel.getValueAt(i, 3));
-				if(i != gradesmodel.getRowCount()-1){
-					categoryscanner.write("\n");
+			FileWriter categoryScanner = new FileWriter(new File(categoryList.get(categoryCombo.getSelectedIndex()).getFilePath()));
+			for(int i = 0; i < gradesModel.getRowCount(); i++){
+				categoryScanner.write(gradesModel.getValueAt(i, 1) + "," + gradesModel.getValueAt(i, 2) + "," + gradesModel.getValueAt(i, 3));
+				if(i != gradesModel.getRowCount()-1){
+					categoryScanner.write("\n");
 				}//End of if
 			}//End of for
-			categoryscanner.close();
+			categoryScanner.close();
 		} catch (IOException e) {
 			
 		}//End of try catch
 		
 		//Updates quicklaunch file to determine whether the launch window can be used or not
-		String quicksemester = "";
-		String quicktitle = "";
+		String quickSemester = "";
+		String quickTitle = "";
 		try {
-			Scanner quickscan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-			quicksemester = quickscan.nextLine();
-			quicktitle = quickscan.nextLine();
-			quickscan.close();
-			FileWriter quickwrite = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-			quickwrite.write(quicksemester + "\n");
-			quickwrite.write(quicktitle + "\n");
-			quickwrite.write("" + appframe.quickcheck.isSelected());
-			quickwrite.close();
+			Scanner quickScan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+			quickSemester = quickScan.nextLine();
+			quickTitle = quickScan.nextLine();
+			quickScan.close();
+			FileWriter quickWrite = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+			quickWrite.write(quickSemester + "\n");
+			quickWrite.write(quickTitle + "\n");
+			quickWrite.write("" + AppFrame.quickCheck.isSelected());
+			quickWrite.close();
 		} catch (Exception e) {
 			
 		}//End of try catch
@@ -274,40 +274,40 @@ public class frameactions extends appframe{
 		try {
 			
 			//Master file
-			String classfile = "class" + (classcombo.getSelectedIndex()+1) + ".txt";
-			FileWriter masterwrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/master.txt"));
-			masterwrite.write(quicktitle + "\n");
-			masterwrite.write(classfile);
-			masterwrite.close();
+			String classFile = "class" + (classCombo.getSelectedIndex()+1) + ".txt";
+			FileWriter masterWrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quickSemester + "/master.txt"));
+			masterWrite.write(quickTitle + "\n");
+			masterWrite.write(classFile);
+			masterWrite.close();
 			
 			//Class file
-			ArrayList<String> classlines = new ArrayList();
-			Scanner classscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/" + classfile));
-			while(classscan.hasNext()){
-				classlines.add(classscan.nextLine());
+			ArrayList<String> classLines = new ArrayList();
+			Scanner classScan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + quickSemester + "/" + classFile));
+			while(classScan.hasNext()){
+				classLines.add(classScan.nextLine());
 			}//End of while
-			classscan.close();
-			classlines.set(2, scalefield.getText());
-			classlines.set((classlines.size()-1), "" + categorycombo.getSelectedIndex());
-			FileWriter classwrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quicksemester + "/" + classfile));
-			for(int i = 0; i < classlines.size(); i++){
-				classwrite.write(classlines.get(i));
-				if(i != classlines.size()-1){
-					classwrite.write("\n");
+			classScan.close();
+			classLines.set(2, scaleField.getText());
+			classLines.set((classLines.size()-1), "" + categoryCombo.getSelectedIndex());
+			FileWriter classWrite = new FileWriter(new File(System.getProperty("user.dir") + "/savedsemesters/" + quickSemester + "/" + classFile));
+			for(int i = 0; i < classLines.size(); i++){
+				classWrite.write(classLines.get(i));
+				if(i != classLines.size()-1){
+					classWrite.write("\n");
 				}//End of if
 			}//End of for
-			classwrite.close();
+			classWrite.close();
 			
 			//Get last saved table, grade scale, and quicklaunch check to determine if something is updated
-			DefaultTableModel newmodel = (DefaultTableModel) appframe.gradestable.getModel();
-			appframe.lasttable = new String[newmodel.getRowCount()][3];
-			for(int i = 0; i < appframe.lasttable.length; i++) {
-				appframe.lasttable[i][0] = newmodel.getValueAt(i, 1).toString();
-				appframe.lasttable[i][1] = newmodel.getValueAt(i, 2).toString();
-				appframe.lasttable[i][2] = newmodel.getValueAt(i, 3).toString();
+			DefaultTableModel newModel = (DefaultTableModel) AppFrame.gradesTable.getModel();
+			AppFrame.lastTable = new String[newModel.getRowCount()][3];
+			for(int i = 0; i < AppFrame.lastTable.length; i++) {
+				AppFrame.lastTable[i][0] = newModel.getValueAt(i, 1).toString();
+				AppFrame.lastTable[i][1] = newModel.getValueAt(i, 2).toString();
+				AppFrame.lastTable[i][2] = newModel.getValueAt(i, 3).toString();
 			}//End of for
-			appframe.lastscale = appframe.scalefield.getText();
-			appframe.lastquick = appframe.quickcheck.isSelected();
+			AppFrame.lastScale = AppFrame.scaleField.getText();
+			AppFrame.lastQuick = AppFrame.quickCheck.isSelected();
 			
 		} catch (Exception e) {
 			
@@ -323,16 +323,16 @@ public class frameactions extends appframe{
 		
 		//Iterate loop until grade is calculated or an empty file is found
 		double grade = 0.0;
-		DefaultTableModel valuemodel = (DefaultTableModel) valuetable.getModel();
-		for(int i = 0; i < categorylist.size(); i++){
+		DefaultTableModel valueModel = (DefaultTableModel) valueTable.getModel();
+		for(int i = 0; i < categoryList.size(); i++){
 			
 			//If current category is loaded already
 			if(i == in){
-				if(valuemodel.getValueAt(6, 2).equals("N/A")){
+				if(valueModel.getValueAt(6, 2).equals("N/A")){
 					return "N/A";
 				}//End of if
 				else{
-					grade += Double.parseDouble(valuemodel.getValueAt(6, 2).toString());
+					grade += Double.parseDouble(valueModel.getValueAt(6, 2).toString());
 				}//End of else
 			}//End of if
 			
@@ -341,7 +341,7 @@ public class frameactions extends appframe{
 				try {
 					
 					//If file is empty
-					Scanner sc = new Scanner(new File(categorylist.get(i).getFilepath()));
+					Scanner sc = new Scanner(new File(categoryList.get(i).getFilePath()));
 					if(!(sc.hasNext())){
 						sc.close();
 						return "N/A";
@@ -352,12 +352,12 @@ public class frameactions extends appframe{
 						double earned = 0.0;
 						double possible = 0.0;
 						while(sc.hasNext()){
-							String[] graderow = sc.nextLine().split(",");
-							earned += Double.parseDouble(graderow[1]);
-							possible += Double.parseDouble(graderow[2]);
+							String[] gradeRow = sc.nextLine().split(",");
+							earned += Double.parseDouble(gradeRow[1]);
+							possible += Double.parseDouble(gradeRow[2]);
 						}//End of while
 						double percent = earned/possible;
-						double weighted = percent*Double.parseDouble(categorylist.get(i).getWeight());
+						double weighted = percent*Double.parseDouble(categoryList.get(i).getWeight());
 						grade += weighted;
 					}//End of else
 					sc.close();
@@ -370,7 +370,7 @@ public class frameactions extends appframe{
 			
 		}//End of for
 		
-		grade += Double.parseDouble(scalefield.getText());
+		grade += Double.parseDouble(scaleField.getText());
 		return "" + grade;
 		
 	}//End of loadOverallGrade
@@ -379,16 +379,16 @@ public class frameactions extends appframe{
 		
 		//Iterate loop until grade is calculated or an empty file is found
 		double grade = 0.0;
-		DefaultTableModel valuemodel = (DefaultTableModel) valuetable.getModel();
-		for(int i = 0; i < categorylist.size(); i++){
+		DefaultTableModel valueModel = (DefaultTableModel) valueTable.getModel();
+		for(int i = 0; i < categoryList.size(); i++){
 			
 			//If current category is loaded already
 			if(i == in){
-				if(valuemodel.getValueAt(6, 2).equals("N/A")){
-					grade += Double.parseDouble(categorylist.get(i).getWeight());
+				if(valueModel.getValueAt(6, 2).equals("N/A")){
+					grade += Double.parseDouble(categoryList.get(i).getWeight());
 				}//End of if
 				else{
-					grade += Double.parseDouble(valuemodel.getValueAt(6, 2).toString());
+					grade += Double.parseDouble(valueModel.getValueAt(6, 2).toString());
 				}//End of else
 			}//End of if
 			
@@ -397,10 +397,10 @@ public class frameactions extends appframe{
 				try {
 					
 					//If file is empty
-					Scanner sc = new Scanner(new File(categorylist.get(i).getFilepath()));
+					Scanner sc = new Scanner(new File(categoryList.get(i).getFilePath()));
 					if(!(sc.hasNext())){
 						sc.close();
-						grade += Double.parseDouble(categorylist.get(i).getWeight());
+						grade += Double.parseDouble(categoryList.get(i).getWeight());
 					}//End of if
 					
 					//If file has atleast 1 grade
@@ -408,12 +408,12 @@ public class frameactions extends appframe{
 						double earned = 0.0;
 						double possible = 0.0;
 						while(sc.hasNext()){
-							String[] graderow = sc.nextLine().split(",");
-							earned += Double.parseDouble(graderow[1]);
-							possible += Double.parseDouble(graderow[2]);
+							String[] gradeRow = sc.nextLine().split(",");
+							earned += Double.parseDouble(gradeRow[1]);
+							possible += Double.parseDouble(gradeRow[2]);
 						}//End of while
 						double percent = earned/possible;
-						double weighted = percent*Double.parseDouble(categorylist.get(i).getWeight());
+						double weighted = percent*Double.parseDouble(categoryList.get(i).getWeight());
 						grade += weighted;
 					}//End of else
 					sc.close();
@@ -426,7 +426,7 @@ public class frameactions extends appframe{
 			
 		}//End of for
 		
-		grade += Double.parseDouble(scalefield.getText());
+		grade += Double.parseDouble(scaleField.getText());
 		return "" + grade;
 		
 	}//End of loadBestGrade
@@ -435,16 +435,16 @@ public class frameactions extends appframe{
 		
 		//Iterate loop until grade is calculated or an empty file is found
 		double grade = 0.0;
-		DefaultTableModel valuemodel = (DefaultTableModel) valuetable.getModel();
-		for(int i = 0; i < categorylist.size(); i++){
+		DefaultTableModel valueModel = (DefaultTableModel) valueTable.getModel();
+		for(int i = 0; i < categoryList.size(); i++){
 			
 			//If current category is loaded already
 			if(i == in){
-				if(valuemodel.getValueAt(6, 2).equals("N/A")){
+				if(valueModel.getValueAt(6, 2).equals("N/A")){
 					grade += 0;
 				}//End of if
 				else{
-					grade += Double.parseDouble(valuemodel.getValueAt(6, 2).toString());
+					grade += Double.parseDouble(valueModel.getValueAt(6, 2).toString());
 				}//End of else
 			}//End of if
 			
@@ -453,7 +453,7 @@ public class frameactions extends appframe{
 				try {
 					
 					//If file is empty
-					Scanner sc = new Scanner(new File(categorylist.get(i).getFilepath()));
+					Scanner sc = new Scanner(new File(categoryList.get(i).getFilePath()));
 					if(!(sc.hasNext())){
 						sc.close();
 						grade += 0;
@@ -464,12 +464,12 @@ public class frameactions extends appframe{
 						double earned = 0.0;
 						double possible = 0.0;
 						while(sc.hasNext()){
-							String[] graderow = sc.nextLine().split(",");
-							earned += Double.parseDouble(graderow[1]);
-							possible += Double.parseDouble(graderow[2]);
+							String[] gradeRow = sc.nextLine().split(",");
+							earned += Double.parseDouble(gradeRow[1]);
+							possible += Double.parseDouble(gradeRow[2]);
 						}//End of while
 						double percent = earned/possible;
-						double weighted = percent*Double.parseDouble(categorylist.get(i).getWeight());
+						double weighted = percent*Double.parseDouble(categoryList.get(i).getWeight());
 						grade += weighted;
 					}//End of else
 					sc.close();
@@ -482,9 +482,9 @@ public class frameactions extends appframe{
 			
 		}//End of for
 		
-		grade += Double.parseDouble(scalefield.getText());
+		grade += Double.parseDouble(scaleField.getText());
 		return "" + grade;
 		
 	}//End of loadWorstGrade
 	
-}//End of frameactions
+}//End of FrameActions

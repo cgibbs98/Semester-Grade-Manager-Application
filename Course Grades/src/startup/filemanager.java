@@ -8,9 +8,9 @@ import java.nio.file.attribute.*;
 import java.util.*;
 import javax.swing.*;
 
-import application.appframe;
+import application.AppFrame;
 
-public class filemanager extends JFrame{
+public class FileManager extends JFrame{
 	
 	//Inner class for copying folders (Tutorial at: https://www.codejava.net/java-se/file-io/java-nio-copy-file-or-directory-examples)
 	public class copyFolder extends SimpleFileVisitor<Path> {
@@ -50,10 +50,10 @@ public class filemanager extends JFrame{
 	
 	
 	
-	public JComboBox semestercombo;
-	public JTextField filenamefield;
+	public JComboBox semesterCombo;
+	public JTextField fileNameField;
 	
-	public filemanager(){
+	public FileManager(){
 		
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -69,73 +69,73 @@ public class filemanager extends JFrame{
 				
 		//Components
 		Container pane = getContentPane();
-		JPanel buttonpanel = new JPanel();
-		JButton southbutton1 = new JButton("Perform Action");
-		JButton southbutton2 = new JButton("Open Folder");
-		JButton southbutton3 = new JButton("Close Window");
-		buttonpanel.add(southbutton1);
-		buttonpanel.add(southbutton2);
-		buttonpanel.add(southbutton3);
-		pane.add(buttonpanel, BorderLayout.SOUTH);
+		JPanel buttonPanel = new JPanel();
+		JButton southButton1 = new JButton("Perform Action");
+		JButton southButton2 = new JButton("Open Folder");
+		JButton southButton3 = new JButton("Close Window");
+		buttonPanel.add(southButton1);
+		buttonPanel.add(southButton2);
+		buttonPanel.add(southButton3);
+		pane.add(buttonPanel, BorderLayout.SOUTH);
 		
-		//Westbox
-		Box westbox = Box.createVerticalBox();
-		JLabel westlabel = new JLabel("  " + "File Actions:");
-		ButtonGroup buttongroup = new ButtonGroup();
+		//WestBox
+		Box westBox = Box.createVerticalBox();
+		JLabel westLabel = new JLabel("  " + "File Actions:");
+		ButtonGroup grouping = new ButtonGroup();
 		JRadioButton button1 = new JRadioButton("Change Semester Filename");
 		JRadioButton button2 = new JRadioButton("Copy Semester");
 		JRadioButton button3 = new JRadioButton("Delete Semester");
-		buttongroup.add(button1);
-		buttongroup.add(button2);
-		buttongroup.add(button3);
+		grouping.add(button1);
+		grouping.add(button2);
+		grouping.add(button3);
 		button1.setSelected(true);
-		westbox.add(westlabel);
-		westbox.add(button1);
-		westbox.add(button2);
-		westbox.add(button3);
-		pane.add(westbox, BorderLayout.WEST);
+		westBox.add(westLabel);
+		westBox.add(button1);
+		westBox.add(button2);
+		westBox.add(button3);
+		pane.add(westBox, BorderLayout.WEST);
 		
-		//Eastbox
-		Box eastbox = Box.createVerticalBox();
-		JPanel eastpanel1 = new JPanel();
-		JLabel semesterlabel = new JLabel("Selected: ");
-		semestercombo = new JComboBox();
-		semestercombo.setPreferredSize(new Dimension(150, semestercombo.getPreferredSize().height));
+		//EastBox
+		Box eastBox = Box.createVerticalBox();
+		JPanel eastPanel1 = new JPanel();
+		JLabel semesterLabel = new JLabel("Selected: ");
+		semesterCombo = new JComboBox();
+		semesterCombo.setPreferredSize(new Dimension(150, semesterCombo.getPreferredSize().height));
 		getSemesters();
 		
-		JPanel eastpanel2 = new JPanel();
-		JLabel filenamelabel = new JLabel("New Filename: ");
-		filenamefield = new JTextField("");
-		filenamefield.setPreferredSize(new Dimension(150, filenamefield.getPreferredSize().height));
+		JPanel eastPanel2 = new JPanel();
+		JLabel fileNameLabel = new JLabel("New Filename: ");
+		fileNameField = new JTextField("");
+		fileNameField.setPreferredSize(new Dimension(150, fileNameField.getPreferredSize().height));
 		
-		eastpanel1.add(semesterlabel);
-		eastpanel1.add(semestercombo);
-		eastpanel2.add(filenamelabel);
-		eastpanel2.add(filenamefield);
-		eastbox.add(eastpanel1);
-		eastbox.add(eastpanel2);
-		pane.add(eastbox, BorderLayout.EAST);
+		eastPanel1.add(semesterLabel);
+		eastPanel1.add(semesterCombo);
+		eastPanel2.add(fileNameLabel);
+		eastPanel2.add(fileNameField);
+		eastBox.add(eastPanel1);
+		eastBox.add(eastPanel2);
+		pane.add(eastBox, BorderLayout.EAST);
 		
 		//Action Listeners
 		button1.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				filenamelabel.setEnabled(true);
-				filenamefield.setEnabled(true);
+				fileNameLabel.setEnabled(true);
+				fileNameField.setEnabled(true);
 			}  
 		});
 		button2.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				filenamelabel.setEnabled(true);
-				filenamefield.setEnabled(true);
+				fileNameLabel.setEnabled(true);
+				fileNameField.setEnabled(true);
 			}  
 		});
 		button3.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				filenamelabel.setEnabled(false);
-				filenamefield.setEnabled(false);
+				fileNameLabel.setEnabled(false);
+				fileNameField.setEnabled(false);
 			}  
 		});
-		southbutton1.addActionListener(new ActionListener(){  
+		southButton1.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				
 				//Perform the selected operation
@@ -144,39 +144,39 @@ public class filemanager extends JFrame{
 				if(button1.isSelected()){
 					
 					//Check if folder name can replace an existing name
-					if(filenamefield.getText().equals("")){
-						utilities.misc.errorMessage("Can't rename semester! Folder name textfield is blank.");
-						filenamefield.setText("");
+					if(fileNameField.getText().equals("")){
+						utilities.Misc.errorMessage("Can't rename semester! Folder name textfield is blank.");
+						fileNameField.setText("");
 						return;
 					}//End of if
-					for(int i = 0; i < semestercombo.getItemCount(); i++){
-						if(filenamefield.getText().equals(semestercombo.getItemAt(i))){
-							utilities.misc.errorMessage("Can't rename semester! Folder name already exists.");
-							filenamefield.setText("");
+					for(int i = 0; i < semesterCombo.getItemCount(); i++){
+						if(fileNameField.getText().equals(semesterCombo.getItemAt(i))){
+							utilities.Misc.errorMessage("Can't rename semester! Folder name already exists.");
+							fileNameField.setText("");
 							return;
 						}//End of if
 					}//End of for
 					
 					//Renames file
-					File initial = new File(System.getProperty("user.dir") + "/savedsemesters" + "/" + semestercombo.getSelectedItem().toString());
-					if(initial.renameTo(new File(System.getProperty("user.dir") + "/savedsemesters" + "/" + filenamefield.getText()))) {
+					File initial = new File(System.getProperty("user.dir") + "/savedsemesters" + "/" + semesterCombo.getSelectedItem().toString());
+					if(initial.renameTo(new File(System.getProperty("user.dir") + "/savedsemesters" + "/" + fileNameField.getText()))) {
 						
 						//Opens quicklaunch file and updates it if semester being quicklaunched has a new name
-						String quicksemester = "";
-						String quicktitle = "";
-						boolean quickboolean;
+						String quickSemester = "";
+						String quickTitle = "";
+						boolean quickBoolean;
 						try {
-							Scanner quickscan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-							quicksemester = quickscan.nextLine();
-							quicktitle = quickscan.nextLine();
-							quickboolean = Boolean.parseBoolean(quickscan.nextLine());
-							quickscan.close();
-							if(quicksemester.equals(semestercombo.getSelectedItem().toString())){
-								FileWriter quickwrite = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-								quickwrite.write(filenamefield.getText() + "\n");
-								quickwrite.write(quicktitle + "\n");
-								quickwrite.write("" + quickboolean);
-								quickwrite.close();
+							Scanner quickScan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+							quickSemester = quickScan.nextLine();
+							quickTitle = quickScan.nextLine();
+							quickBoolean = Boolean.parseBoolean(quickScan.nextLine());
+							quickScan.close();
+							if(quickSemester.equals(semesterCombo.getSelectedItem().toString())){
+								FileWriter quickWrite = new FileWriter(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+								quickWrite.write(fileNameField.getText() + "\n");
+								quickWrite.write(quickTitle + "\n");
+								quickWrite.write("" + quickBoolean);
+								quickWrite.close();
 							}//End of if
 						} catch (Exception ex) {
 							
@@ -185,14 +185,14 @@ public class filemanager extends JFrame{
 						//Changes combobox to accomodate name change and set index to new name
 						removeCombos();
 						getSemesters();
-						semestercombo.setSelectedItem(filenamefield.getText());
-						filenamefield.setText("");
+						semesterCombo.setSelectedItem(fileNameField.getText());
+						fileNameField.setText("");
 						
 					}//End of if
 					else {
 						
-						utilities.misc.errorMessage("An error has occured when renaming folder; Please try again later.");
-						filenamefield.setText("");
+						utilities.Misc.errorMessage("An error has occured when renaming folder; Please try again later.");
+						fileNameField.setText("");
 						return;
 						
 					}//End of else
@@ -204,34 +204,34 @@ public class filemanager extends JFrame{
 				else if(button2.isSelected()){
 					
 					//Check if folder name can replace an existing name
-					if(filenamefield.getText().equals("")){
-						utilities.misc.errorMessage("Can't copy semester! Folder name textfield is blank.");
-						filenamefield.setText("");
+					if(fileNameField.getText().equals("")){
+						utilities.Misc.errorMessage("Can't copy semester! Folder name textfield is blank.");
+						fileNameField.setText("");
 						return;
 					}//End of if
-					for(int i = 0; i < semestercombo.getItemCount(); i++){
-						if(filenamefield.getText().equals(semestercombo.getItemAt(i))){
-							utilities.misc.errorMessage("Can't copy semester! Folder name already exists.");
-							filenamefield.setText("");
+					for(int i = 0; i < semesterCombo.getItemCount(); i++){
+						if(fileNameField.getText().equals(semesterCombo.getItemAt(i))){
+							utilities.Misc.errorMessage("Can't copy semester! Folder name already exists.");
+							fileNameField.setText("");
 							return;
 						}//End of if
 					}//End of for
 					
 					//Copies folder
 					try {
-						Path src = Paths.get(System.getProperty("user.dir") + "/savedsemesters" + "/" + semestercombo.getSelectedItem().toString());
-						Path dest = Paths.get(System.getProperty("user.dir") + "/savedsemesters" + "/" + filenamefield.getText());
+						Path src = Paths.get(System.getProperty("user.dir") + "/savedsemesters" + "/" + semesterCombo.getSelectedItem().toString());
+						Path dest = Paths.get(System.getProperty("user.dir") + "/savedsemesters" + "/" + fileNameField.getText());
 						Files.walkFileTree(src, new copyFolder(src, dest));
 						
 						//Changes combobox to accomodate new folder and set index to new folder
 						removeCombos();
 						getSemesters();
-						semestercombo.setSelectedItem(filenamefield.getText());
-						filenamefield.setText("");
+						semesterCombo.setSelectedItem(fileNameField.getText());
+						fileNameField.setText("");
 						
 					}catch(Exception ex) {
-						utilities.misc.errorMessage("An error has occured when copying folder; Please try again later.");
-						filenamefield.setText("");
+						utilities.Misc.errorMessage("An error has occured when copying folder; Please try again later.");
+						fileNameField.setText("");
 						return;
 					}
 					
@@ -242,21 +242,21 @@ public class filemanager extends JFrame{
 					
 					//Delete files
 					try {
-						removeDirectory(new File(System.getProperty("user.dir") + "/savedsemesters" + "/" + semestercombo.getSelectedItem().toString()));
+						removeDirectory(new File(System.getProperty("user.dir") + "/savedsemesters" + "/" + semesterCombo.getSelectedItem().toString()));
 						
 					}catch(Exception ex) {
-						utilities.misc.errorMessage("An error has occured when deleting folder; Please try again later.");
-						filenamefield.setText("");
+						utilities.Misc.errorMessage("An error has occured when deleting folder; Please try again later.");
+						fileNameField.setText("");
 						return;
 					}
 					
 					//Deletes quicklaunch file if the semester set for quicklaunch has been deleted
-					String quicksemester = "";
+					String quickSemester = "";
 					try {
-						Scanner quickscan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
-						quicksemester = quickscan.nextLine();
-						quickscan.close();
-						if(quicksemester.equals(semestercombo.getSelectedItem().toString())){
+						Scanner quickScan = new Scanner(new File(System.getProperty("user.dir") + "/quicklaunch.txt"));
+						quickSemester = quickScan.nextLine();
+						quickScan.close();
+						if(quickSemester.equals(semesterCombo.getSelectedItem().toString())){
 							File removed = new File(System.getProperty("user.dir") + "/quicklaunch.txt");
 							removed.delete();
 						}//End of if
@@ -265,65 +265,65 @@ public class filemanager extends JFrame{
 					}//End of try catch
 					
 					//Set combobox to previous index to accomodate deleted folder and close window if no ore fodlers are present
-					semestercombo.removeItem(semestercombo.getSelectedItem().toString());
-					int index = semestercombo.getItemCount()-1;
+					semesterCombo.removeItem(semesterCombo.getSelectedItem().toString());
+					int index = semesterCombo.getItemCount()-1;
 					if(index < 0){
-						filenamefield.setText("");
+						fileNameField.setText("");
 						dispose();
-						launch.main(null);
+						Launch.main(null);
 					}//End of if
 					else{
-						semestercombo.setSelectedIndex(index);
+						semesterCombo.setSelectedIndex(index);
 						
 						//Changes combobox to accomodate name change and set index to new name
 						removeCombos();
 						getSemesters();
-						filenamefield.setText("");
+						fileNameField.setText("");
 					}//End of else
 					
 				}//End of else if
 				
 			}  
 		});
-		southbutton2.addActionListener(new ActionListener(){  
+		southButton2.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				
 				//Open current semester folder
 				Desktop desktop = Desktop.getDesktop();
 		        File open = null;
 		        try {
-		            open = new File(System.getProperty("user.dir") + "/savedsemesters/" + semestercombo.getSelectedItem().toString());
+		            open = new File(System.getProperty("user.dir") + "/savedsemesters/" + semesterCombo.getSelectedItem().toString());
 		            desktop.open(open);
 		        } catch (Exception ex) {
-		        	utilities.misc.errorMessage("An error has occured, Please try again later.");
+		        	utilities.Misc.errorMessage("An error has occured, Please try again later.");
 		        }
 		        
 			}  
 		});
-		southbutton3.addActionListener(new ActionListener(){  
+		southButton3.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				File relaunchfile = new File("relaunch.txt");
-		    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
+				File relaunchFile = new File("relaunch.txt");
+		    	try {relaunchFile.createNewFile();} catch (Exception ex) {}
 				removeCombos();
-				filenamefield.setText("");
+				fileNameField.setText("");
 				dispose();
-				launch.main(null);
+				Launch.main(null);
 			}  
 		});
 		
 		//Window Listener for Close Button
 		addWindowListener(new WindowAdapter() {
 		public void windowClosing(WindowEvent e) {
-			File relaunchfile = new File("relaunch.txt");
-	    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
+			File relaunchFile = new File("relaunch.txt");
+	    	try {relaunchFile.createNewFile();} catch (Exception ex) {}
 			removeCombos();
-			filenamefield.setText("");
+			fileNameField.setText("");
 			dispose();
-			launch.main(null);
+			Launch.main(null);
 		}
 		});
 		
-	}//End of filemanager
+	}//End of FileManager
 	
 	
 	
@@ -333,10 +333,10 @@ public class filemanager extends JFrame{
 		
 		//Clear directory recursively recursively (Tutorial at: https://www.codejava.net/java-se/file-io/clean-and-remove-a-non-empty-directory)
 		 if(dir.isDirectory()) {
-			 File[] fileset = dir.listFiles();
-				 if (fileset != null && fileset.length > 0) {
-					 for (int i = 0; i < fileset.length; i++) {
-						 removeDirectory(fileset[i]);
+			 File[] fileSet = dir.listFiles();
+				 if (fileSet != null && fileSet.length > 0) {
+					 for (int i = 0; i < fileSet.length; i++) {
+						 removeDirectory(fileSet[i]);
 					 }//End of for
 				 }//End of if
 			 dir.delete();
@@ -356,11 +356,11 @@ public class filemanager extends JFrame{
 				return file.isDirectory();
 			}
 		};
-		File[] folderset = directory.listFiles(filter);
+		File[] folderSet = directory.listFiles(filter);
 		
 		//Add folders to combobox
-		for(int i = 0; i < folderset.length; i++) {
-			semestercombo.addItem(folderset[i].getName());
+		for(int i = 0; i < folderSet.length; i++) {
+			semesterCombo.addItem(folderSet[i].getName());
 		}//End of for
 		
 	}//End of getSemesters
@@ -368,20 +368,20 @@ public class filemanager extends JFrame{
 	public void removeCombos(){
 		
 		//Remove options from combobox
-		int combocount = semestercombo.getItemCount();
-		for(int i = 0; i < combocount-1; i++){
-			semestercombo.removeItemAt(0);
+		int comboCount = semesterCombo.getItemCount();
+		for(int i = 0; i < comboCount-1; i++){
+			semesterCombo.removeItemAt(0);
 		}//End of for
-		semestercombo.removeItemAt(0);
+		semesterCombo.removeItemAt(0);
 		
 	}//End of removeCombos
 	
 	public static void main(String[] args) {
 		
 		//Launch new instance of frame
-		filemanager frame = new filemanager();
+		FileManager frame = new FileManager();
 		frame.setVisible(true);
 
 	}//End of main
 
-}//End of filemanager
+}//End of FileManager

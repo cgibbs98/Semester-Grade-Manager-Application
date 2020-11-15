@@ -7,31 +7,31 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-import startup.launch;
+import startup.Launch;
 
-public class appframe extends JFrame{
+public class AppFrame extends JFrame{
 
-	public static JTable gradestable;
-	public static JTable valuetable;
-	public static JLabel coursename = new JLabel("");
-	public static JTextField scalefield = new JTextField("");
-	public static JLabel weightname = new JLabel("Category" + " - Weight: " + "%");
-	public static JComboBox categorycombo = new JComboBox();
-	public static JComboBox classcombo = new JComboBox();
-	public static JCheckBox quickcheck = new JCheckBox();
-	public static JButton needbutton = new JButton("Check Points Needed");
-	public JButton addbutton = new JButton("Add New Grade");
-	public JButton removebutton = new JButton("Remove Empty Grades");
-	public JButton updatebutton = new JButton("Update and Save Grades");
-	public static ArrayList<categoryobject> categorylist = new ArrayList();
-	public static boolean combolisten;
-	public static int prevcategory;
-	public static int prevclass;
-	public static String[][] lasttable;
-	public static String lastscale;
-	public static boolean lastquick;
+	public static JTable gradesTable;
+	public static JTable valueTable;
+	public static JLabel courseName = new JLabel("");
+	public static JTextField scaleField = new JTextField("");
+	public static JLabel weightName = new JLabel("Category" + " - Weight: " + "%");
+	public static JComboBox categoryCombo = new JComboBox();
+	public static JComboBox classCombo = new JComboBox();
+	public static JCheckBox quickCheck = new JCheckBox();
+	public static JButton needButton = new JButton("Check Points Needed");
+	public JButton addButton = new JButton("Add New Grade");
+	public JButton removeButton = new JButton("Remove Empty Grades");
+	public JButton updateButton = new JButton("Update and Save Grades");
+	public static ArrayList<CategoryObject> categoryList = new ArrayList();
+	public static boolean comboListen;
+	public static int prevCategory;
+	public static int prevClass;
+	public static String[][] lastTable;
+	public static String lastScale;
+	public static boolean lastQuick;
 	
-	public appframe(String filename, boolean quickcheckvalue){
+	public AppFrame(String fileName, boolean quickCheckValue){
 		
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -46,32 +46,32 @@ public class appframe extends JFrame{
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		Container pane = getContentPane();
 		
-		//Menubar
-		JMenuBar menubar = new JMenuBar();
-		JMenu filemenu = new JMenu("File");
-		JMenu helpmenu = new JMenu("Help");
-		JMenuItem saveitem = new JMenuItem("Save");
-		JMenuItem startupsaveitem = new JMenuItem("Save & Open Startup");
-		JMenuItem startupitem = new JMenuItem("Open Startup");
-		JMenuItem exitsaveitem = new JMenuItem("Save & Exit");
-		JMenuItem exititem = new JMenuItem("Exit");
-		JMenuItem helpitem = new JMenuItem("Help Topics");
-		JMenuItem propitem = new JMenuItem("View Properties");
-		JMenuItem aboutitem = new JMenuItem("About");
-		filemenu.add(saveitem);
-		filemenu.addSeparator();
-		filemenu.add(startupsaveitem);
-		filemenu.add(startupitem);
-		filemenu.addSeparator();
-		filemenu.add(exitsaveitem);
-		filemenu.add(exititem);
-		helpmenu.add(helpitem);
-		helpmenu.add(propitem);
-		helpmenu.addSeparator();
-		helpmenu.add(aboutitem);
-		menubar.add(filemenu);
-		menubar.add(helpmenu);
-		setJMenuBar(menubar);
+		//menuBar
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		JMenu helpMenu = new JMenu("Help");
+		JMenuItem saveItem = new JMenuItem("Save");
+		JMenuItem startUpSaveItem = new JMenuItem("Save & Open Startup");
+		JMenuItem startUpItem = new JMenuItem("Open Startup");
+		JMenuItem exitSaveItem = new JMenuItem("Save & Exit");
+		JMenuItem exitItem = new JMenuItem("Exit");
+		JMenuItem helpItem = new JMenuItem("Help Topics");
+		JMenuItem propItem = new JMenuItem("View Properties");
+		JMenuItem aboutItem = new JMenuItem("About");
+		fileMenu.add(saveItem);
+		fileMenu.addSeparator();
+		fileMenu.add(startUpSaveItem);
+		fileMenu.add(startUpItem);
+		fileMenu.addSeparator();
+		fileMenu.add(exitSaveItem);
+		fileMenu.add(exitItem);
+		helpMenu.add(helpItem);
+		helpMenu.add(propItem);
+		helpMenu.addSeparator();
+		helpMenu.add(aboutItem);
+		menuBar.add(fileMenu);
+		menuBar.add(helpMenu);
+		setJMenuBar(menuBar);
 		
 		//Grades Table
 		String[] columns = new String[] {
@@ -80,35 +80,35 @@ public class appframe extends JFrame{
 		Object[][] data = new Object[][] {
         };
         //Create table
-        gradestable = new JTable(new DefaultTableModel(data, columns)){
+        gradesTable = new JTable(new DefaultTableModel(data, columns)){
         	//Make ID non editable
         	@Override
         	public boolean isCellEditable(int row, int col) {
         	     return col != 0;
         	}
         };
-        gradestable.getColumnModel().getColumn(0).setPreferredWidth(25);
-        gradestable.getColumnModel().getColumn(1).setPreferredWidth(125);
-        gradestable.getColumnModel().getColumn(2).setPreferredWidth(125);
-        gradestable.getColumnModel().getColumn(3).setPreferredWidth(125);
+        gradesTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+        gradesTable.getColumnModel().getColumn(1).setPreferredWidth(125);
+        gradesTable.getColumnModel().getColumn(2).setPreferredWidth(125);
+        gradesTable.getColumnModel().getColumn(3).setPreferredWidth(125);
         //Prevent Reordering and Resizing
-        gradestable.getTableHeader().setReorderingAllowed(false);
-        gradestable.getTableHeader().setResizingAllowed(false);
-        gradestable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        JScrollPane gradestablepane = new JScrollPane(gradestable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        gradestablepane.setPreferredSize(new Dimension(gradestable.getPreferredSize().width+17, 160));
+        gradesTable.getTableHeader().setReorderingAllowed(false);
+        gradesTable.getTableHeader().setResizingAllowed(false);
+        gradesTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane gradesTablePane = new JScrollPane(gradesTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        gradesTablePane.setPreferredSize(new Dimension(gradesTable.getPreferredSize().width+17, 160));
         //Align Points Columns to Right
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(JLabel.RIGHT);
-        gradestable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
-        gradestable.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
+        gradesTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer);
+        gradesTable.getColumnModel().getColumn(3).setCellRenderer(rightRenderer);
 		//Table Sorting
-		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(gradestable.getModel());
-		gradestable.setRowSorter(sorter);
-		gradestable.setToolTipText("Table that displays set of assignments/exams and their individual grades");
-		gradestablepane.setToolTipText("Table that displays set of assignments/exams and their individual grades");
-		Box eastbox = Box.createVerticalBox();
-		eastbox.add(gradestablepane);
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(gradesTable.getModel());
+		gradesTable.setRowSorter(sorter);
+		gradesTable.setToolTipText("Table that displays set of assignments/exams and their individual grades");
+		gradesTablePane.setToolTipText("Table that displays set of assignments/exams and their individual grades");
+		Box eastBox = Box.createVerticalBox();
+		eastBox.add(gradesTablePane);
 		
 		
 		
@@ -128,117 +128,117 @@ public class appframe extends JFrame{
             {"7", "Category - Weighted Points", ""},
         };
         //Create table
-        valuetable = new JTable(new DefaultTableModel(data2, columns2)){
+        valueTable = new JTable(new DefaultTableModel(data2, columns2)){
         	//Make ID non editable
         	@Override
         	public boolean isCellEditable(int row, int col) {
         	     return (col < 0);
         	}
         };
-        valuetable.getColumnModel().getColumn(0).setPreferredWidth(25);
-        valuetable.getColumnModel().getColumn(1).setPreferredWidth(250);
-        valuetable.getColumnModel().getColumn(2).setPreferredWidth(75);
+        valueTable.getColumnModel().getColumn(0).setPreferredWidth(25);
+        valueTable.getColumnModel().getColumn(1).setPreferredWidth(250);
+        valueTable.getColumnModel().getColumn(2).setPreferredWidth(75);
         //Prevent Reordering and Resizing
-        valuetable.getTableHeader().setReorderingAllowed(false);
-        valuetable.getTableHeader().setResizingAllowed(false);
-        valuetable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        JScrollPane valuetablepane = new JScrollPane(valuetable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        valuetablepane.setPreferredSize(new Dimension(valuetable.getPreferredSize().width+17, valuetable.getPreferredSize().height));
+        valueTable.getTableHeader().setReorderingAllowed(false);
+        valueTable.getTableHeader().setResizingAllowed(false);
+        valueTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        JScrollPane valueTablePane = new JScrollPane(valueTable, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        valueTablePane.setPreferredSize(new Dimension(valueTable.getPreferredSize().width+17, valueTable.getPreferredSize().height));
         //Align Points Columns to Right
         DefaultTableCellRenderer rightRenderer2 = new DefaultTableCellRenderer();
         rightRenderer2.setHorizontalAlignment(JLabel.RIGHT);
-        valuetable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer2);
-        valuetable.setToolTipText("Table that displays current course grade and some values for calculating it");
-        valuetablepane.setToolTipText("Table that displays current course grade and some values for calculating it");
-		Box westbox = Box.createVerticalBox();
-		westbox.add(valuetablepane);
+        valueTable.getColumnModel().getColumn(2).setCellRenderer(rightRenderer2);
+        valueTable.setToolTipText("Table that displays current course grade and some values for calculating it");
+        valueTablePane.setToolTipText("Table that displays current course grade and some values for calculating it");
+		Box westBox = Box.createVerticalBox();
+		westBox.add(valueTablePane);
 		
 		//Extra Credit/Scale
-		JPanel scalepanel = new JPanel();
-		JLabel scalelabel = new JLabel("Final Grade Extra Credit or Scale: ");
-		scalefield.setPreferredSize(new Dimension(20, scalefield.getPreferredSize().height));
-		scalefield.setHorizontalAlignment(SwingConstants.RIGHT);
-		scalelabel.setToolTipText("Raises overall grade in course by set points and works for overall grade penalties with negative values as well. (Must save for changes to take effect)");
-		scalefield.setToolTipText("Raises overall grade in course by set points and works for overall grade penalties with negative values as well. (Must save for changes to take effect)");
-		scalepanel.add(scalelabel);
-		scalepanel.add(scalefield);
-		westbox.add(scalepanel);
+		JPanel scalePanel = new JPanel();
+		JLabel scaleLabel = new JLabel("Final Grade Extra Credit or Scale: ");
+		scaleField.setPreferredSize(new Dimension(20, scaleField.getPreferredSize().height));
+		scaleField.setHorizontalAlignment(SwingConstants.RIGHT);
+		scaleLabel.setToolTipText("Raises overall grade in course by set points and works for overall grade penalties with negative values as well. (Must save for changes to take effect)");
+		scaleField.setToolTipText("Raises overall grade in course by set points and works for overall grade penalties with negative values as well. (Must save for changes to take effect)");
+		scalePanel.add(scaleLabel);
+		scalePanel.add(scaleField);
+		westBox.add(scalePanel);
 		
 		//Category
-		JPanel categorypanel = new JPanel();
-		JLabel categorylabel = new JLabel("Select Another Category: ");
-		categorycombo.setPreferredSize(new Dimension(200, categorycombo.getPreferredSize().height));
-		categorylabel.setToolTipText("Select another category to view (Autosaves current grades before accessing)");
-		categorycombo.setToolTipText("Select another category to view (Autosaves current grades before accessing)");
-		categorypanel.add(categorylabel);
-		categorypanel.add(categorycombo);
+		JPanel categoryPanel = new JPanel();
+		JLabel categoryLabel = new JLabel("Select Another Category: ");
+		categoryCombo.setPreferredSize(new Dimension(200, categoryCombo.getPreferredSize().height));
+		categoryLabel.setToolTipText("Select another category to view (Autosaves current grades before accessing)");
+		categoryCombo.setToolTipText("Select another category to view (Autosaves current grades before accessing)");
+		categoryPanel.add(categoryLabel);
+		categoryPanel.add(categoryCombo);
 		
         //Class
-        JPanel classpanel = new JPanel();
-        JLabel classlabel = new JLabel("Select Another Class: ");
-        classcombo.setPreferredSize(new Dimension(150, classcombo.getPreferredSize().height));
-        classlabel.setToolTipText("Select another class to view (Autosaves current grades before accessing)");
-        classcombo.setToolTipText("Select another class to view (Autosaves current grades before accessing)");
-        classpanel.add(classlabel);
-        classpanel.add(classcombo);
+        JPanel classPanel = new JPanel();
+        JLabel classLabel = new JLabel("Select Another Class: ");
+        classCombo.setPreferredSize(new Dimension(150, classCombo.getPreferredSize().height));
+        classLabel.setToolTipText("Select another class to view (Autosaves current grades before accessing)");
+        classCombo.setToolTipText("Select another class to view (Autosaves current grades before accessing)");
+        classPanel.add(classLabel);
+        classPanel.add(classCombo);
         
         //Adds Above 2 Components
-        westbox.add(classpanel);
-        pane.add(westbox, BorderLayout.WEST);
-        eastbox.add(categorypanel);
-        pane.add(eastbox, BorderLayout.EAST);
+        westBox.add(classPanel);
+        pane.add(westBox, BorderLayout.WEST);
+        eastBox.add(categoryPanel);
+        pane.add(eastBox, BorderLayout.EAST);
         
 		//Name + Weight Type
-		Box northbox = Box.createVerticalBox();
-		JPanel coursepanel = new JPanel();
-		coursename.setToolTipText("Name of the current course and its code");
-		coursepanel.add(coursename);
-		northbox.add(coursepanel);
-		JPanel weightpanel = new JPanel();
-		weightname.setToolTipText("Name of the current category and its weight");
-		weightpanel.add(weightname);
-		northbox.add(weightpanel);
-		pane.add(northbox, BorderLayout.NORTH);
+		Box northBox = Box.createVerticalBox();
+		JPanel coursePanel = new JPanel();
+		courseName.setToolTipText("Name of the current course and its code");
+		coursePanel.add(courseName);
+		northBox.add(coursePanel);
+		JPanel weightPanel = new JPanel();
+		weightName.setToolTipText("Name of the current category and its weight");
+		weightPanel.add(weightName);
+		northBox.add(weightPanel);
+		pane.add(northBox, BorderLayout.NORTH);
 		
 		//Table Actions
-		JPanel actionspanel = new JPanel();
-		JLabel quicklabel = new JLabel("Open This Semester at Launch:");
-		quickcheck.setSelected(quickcheckvalue);
-		quicklabel.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch (Must save for changes to take effect)");
-		quickcheck.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch (Must save for changes to take effect)");
-		needbutton.setEnabled(false);
-		actionspanel.add(quicklabel);
-		actionspanel.add(quickcheck);
-		actionspanel.add(new JLabel("          "));
-		actionspanel.add(addbutton);
-		actionspanel.add(removebutton);
-		actionspanel.add(needbutton);
-		actionspanel.add(updatebutton);
-		addbutton.setToolTipText("Adds new row to add a new grade for a class");
-		removebutton.setToolTipText("Removes empty rows from grades table");
-		needbutton.setToolTipText("Allows you to find what percentage of points you need in catgories without grades to get a specific overall grade");
-		updatebutton.setToolTipText("Updates grade in course and saves class information");
-		pane.add(actionspanel, BorderLayout.SOUTH);
+		JPanel actionsPanel = new JPanel();
+		JLabel quickLabel = new JLabel("Open This Semester at Launch:");
+		quickCheck.setSelected(quickCheckValue);
+		quickLabel.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch (Must save for changes to take effect)");
+		quickCheck.setToolTipText("Allows semester to be opened up immediately instead of showing a startup screen upon launch (Must save for changes to take effect)");
+		needButton.setEnabled(false);
+		actionsPanel.add(quickLabel);
+		actionsPanel.add(quickCheck);
+		actionsPanel.add(new JLabel("          "));
+		actionsPanel.add(addButton);
+		actionsPanel.add(removeButton);
+		actionsPanel.add(needButton);
+		actionsPanel.add(updateButton);
+		addButton.setToolTipText("Adds new row to add a new grade for a class");
+		removeButton.setToolTipText("Removes empty rows from grades table");
+		needButton.setToolTipText("Allows you to find what percentage of points you need in catgories without grades to get a specific overall grade");
+		updateButton.setToolTipText("Updates grade in course and saves class information");
+		pane.add(actionsPanel, BorderLayout.SOUTH);
 		
 		//Action Listeners
-		addbutton.addActionListener(new ActionListener(){  
+		addButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				frameactions.addEmptyGrade();
+				FrameActions.addEmptyGrade();
 			}  
 		});
-		removebutton.addActionListener(new ActionListener(){  
+		removeButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				frameactions.removeGrades();
+				FrameActions.removeGrades();
 			}  
 		});
-		needbutton.addActionListener(new ActionListener(){  
+		needButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				pointsneeded.main(null);
+				PointsNeeded.main(null);
 			}  
 		});
-		updatebutton.addActionListener(new ActionListener(){  
+		updateButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				frameactions.updateAndSave();
+				FrameActions.updateAndSave();
 			}  
 		});
 		//Open initial master file with semester title and most recent class file
@@ -246,101 +246,101 @@ public class appframe extends JFrame{
 		String firstclass = null;
 		String semestertitle = null;
 		try {
-			masterscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + filename + "/master.txt"));
+			masterscan = new Scanner(new File(System.getProperty("user.dir") + "/savedsemesters/" + fileName + "/master.txt"));
 			semestertitle = masterscan.nextLine();
 			firstclass = masterscan.nextLine();
 			masterscan.close();
 			setTitle(getTitle() + semestertitle);
 		} catch (FileNotFoundException e1) {
-			utilities.misc.errorMessage("Can't open semester files! Closing application.");
+			utilities.Misc.errorMessage("Can't open semester files! Closing application.");
 			System.exit(0);
 		}
-		guiactions.openFiles(filename, firstclass, semestertitle);
+		GuiActions.openFiles(fileName, firstclass, semestertitle);
 		
 		//Combo listeners
-		categorycombo.addActionListener (new ActionListener () {
+		categoryCombo.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	if(combolisten == true){
-		    		frameactions.save(prevcategory, prevclass);
-		    		guiactions.switchCategory(categorycombo.getSelectedIndex());
+		    	if(comboListen == true){
+		    		FrameActions.save(prevCategory, prevClass);
+		    		GuiActions.switchCategory(categoryCombo.getSelectedIndex());
 		    	}//End of if
 		    }
 		});
-		classcombo.addActionListener (new ActionListener () {
+		classCombo.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	if(combolisten == true){
-		    		frameactions.save(prevcategory, prevclass);
-		    		guiactions.switchClass(classcombo.getSelectedIndex(), filename);
+		    	if(comboListen == true){
+		    		FrameActions.save(prevCategory, prevClass);
+		    		GuiActions.switchClass(classCombo.getSelectedIndex(), fileName);
 		    	}//End of if
 		    }
 		});
-		quicklabel.addMouseListener(new MouseAdapter() {  
+		quickLabel.addMouseListener(new MouseAdapter() {  
 		    public void mouseClicked(MouseEvent e) {  
-		    	quickcheck.setSelected(!(quickcheck.isSelected()));
+		    	quickCheck.setSelected(!(quickCheck.isSelected()));
 		    }  
 		});
 		
 		//Menu listeners
-		saveitem.addActionListener (new ActionListener () {
+		saveItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	frameactions.updateAndSave();
+		    	FrameActions.updateAndSave();
 		    }
 		});
-		startupsaveitem.addActionListener (new ActionListener () {
+		startUpSaveItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	frameactions.updateAndSave();
+		    	FrameActions.updateAndSave();
 		    	File relaunchfile = new File("relaunch.txt");
 		    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
-		    	guiactions.clearGUI();
+		    	GuiActions.clearGUI();
 		    	dispose();
-		    	launch.main(null);
+		    	Launch.main(null);
 		    }
 		});
-		startupitem.addActionListener (new ActionListener () {
+		startUpItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
 		    	
 		    	//If grades are unsaved, prompt the user for further action 
 				if(checkLastUpdated() == false){
-					int action = utilities.misc.savePrompt();
+					int action = utilities.Misc.savePrompt();
 					if(action == 0){
-						frameactions.updateAndSave();
+						FrameActions.updateAndSave();
 						File relaunchfile = new File("relaunch.txt");
 				    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
-				    	guiactions.clearGUI();
+				    	GuiActions.clearGUI();
 				    	dispose();
-				    	launch.main(null);
+				    	Launch.main(null);
 					}//End of if
 					else if(action == 1){
 						File relaunchfile = new File("relaunch.txt");
 				    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
-				    	guiactions.clearGUI();
+				    	GuiActions.clearGUI();
 				    	dispose();
-				    	launch.main(null);
+				    	Launch.main(null);
 					}//End of else
 				}//End of if
 				else{
 					File relaunchfile = new File("relaunch.txt");
 			    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
-			    	guiactions.clearGUI();
+			    	GuiActions.clearGUI();
 			    	dispose();
-			    	launch.main(null);
+			    	Launch.main(null);
 				}//End of else
 		    }
 		});
-		exitsaveitem.addActionListener (new ActionListener () {
+		exitSaveItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	frameactions.updateAndSave();
+		    	FrameActions.updateAndSave();
 				System.exit(0);
 		    }
 		});
-		exititem.addActionListener (new ActionListener () {
+		exitItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
 		    	
 		    	//If grades are unsaved, prompt the user for further action 
 				if(checkLastUpdated() == false){
-					int action = utilities.misc.savePrompt();
+					int action = utilities.Misc.savePrompt();
 					if(action == 0){
-						frameactions.updateAndSave();
+						FrameActions.updateAndSave();
 						System.exit(0);
 					}//End of if
 					else if(action == 1){
@@ -352,19 +352,19 @@ public class appframe extends JFrame{
 				}//End of else
 		    }
 		});
-		helpitem.addActionListener (new ActionListener () {
+		helpItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	help.helpframe.main(null);
+		    	help.HelpFrame.main(null);
 		    }
 		});
-		propitem.addActionListener (new ActionListener () {
+		propItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	help.propertiesframe.main(filename);
+		    	help.PropertiesFrame.main(fileName);
 		    }
 		});
-		aboutitem.addActionListener (new ActionListener () {
+		aboutItem.addActionListener (new ActionListener () {
 		    public void actionPerformed(ActionEvent e) {
-		    	help.aboutframe.main(null);
+		    	help.AboutFrame.main(null);
 		    }
 		});
 		
@@ -374,9 +374,9 @@ public class appframe extends JFrame{
 				
 				//If grades are unsaved, prompt the user for further action 
 				if(checkLastUpdated() == false){
-					int action = utilities.misc.savePrompt();
+					int action = utilities.Misc.savePrompt();
 					if(action == 0){
-						frameactions.updateAndSave();
+						FrameActions.updateAndSave();
 						System.exit(0);
 					}//End of if
 					else if(action == 1){
@@ -390,7 +390,7 @@ public class appframe extends JFrame{
 			}
 		});
 		
-	}//End of appframe
+	}//End of AppFrame
 	
 	
 	
@@ -400,18 +400,18 @@ public class appframe extends JFrame{
 		
 		//Check every editable value in the application and return false if something is different from last update, otherwise return true
 		boolean b = true;
-		if(!(lastquick == quickcheck.isSelected())){
+		if(!(lastQuick == quickCheck.isSelected())){
 			return b = false;
 		}//End of if
-		if(!(lastscale.equals(scalefield.getText()))){
+		if(!(lastScale.equals(scaleField.getText()))){
 			return b = false;
 		}//End of else if
-		DefaultTableModel gradesmodel = (DefaultTableModel) gradestable.getModel();
-		if(!(lasttable.length == gradesmodel.getRowCount())){
+		DefaultTableModel gradesmodel = (DefaultTableModel) gradesTable.getModel();
+		if(!(lastTable.length == gradesmodel.getRowCount())){
 			return b = false;
 		}
-		for(int i = 0; i < lasttable.length; i++) {
-			if( !(lasttable[i][0].equals(gradesmodel.getValueAt(i, 1).toString())) || !(lasttable[i][1].equals(gradesmodel.getValueAt(i, 2).toString())) || !(lasttable[i][2].equals(gradesmodel.getValueAt(i, 3).toString())) ){
+		for(int i = 0; i < lastTable.length; i++) {
+			if( !(lastTable[i][0].equals(gradesmodel.getValueAt(i, 1).toString())) || !(lastTable[i][1].equals(gradesmodel.getValueAt(i, 2).toString())) || !(lastTable[i][2].equals(gradesmodel.getValueAt(i, 3).toString())) ){
 				return b = false;
 			}//End of if
 		}//End of for
@@ -419,12 +419,12 @@ public class appframe extends JFrame{
 		
 	}//End of checkLastUpdated
 	
-	public static void main(String filename, boolean quickcheck) {
+	public static void main(String fileName, boolean quickCheck) {
 		
 		//Launch new instance of frame
-		appframe frame = new appframe(filename, quickcheck);
+		AppFrame frame = new AppFrame(fileName, quickCheck);
 		frame.setVisible(true);
 
 	}//End of main
 
-}//End of appframe
+}//End of AppFrame

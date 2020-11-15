@@ -7,12 +7,12 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
-public class pointsneeded extends JDialog{
+public class PointsNeeded extends JDialog{
 
-	public JTextField pointsfield = new JTextField("");
-	public JLabel needlabel = new JLabel("");
+	public JTextField pointsField = new JTextField("");
+	public JLabel needLabel = new JLabel("");
 	
-	public pointsneeded(){
+	public PointsNeeded(){
 	
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -29,34 +29,34 @@ public class pointsneeded extends JDialog{
 		
 		//Components
 		Container pane = getContentPane();
-		JLabel instructionslabel = new JLabel("Type in the overall grade to know how much points you'll need to achieve it in this class.");
-		JPanel fieldpanel = new JPanel();
-		JLabel fieldlabel = new JLabel("Overall grade: ");
-		pane.add(needlabel, BorderLayout.WEST);
+		JLabel instructionsLabel = new JLabel("Type in the overall grade to know how much points you'll need to achieve it in this class.");
+		JPanel fieldPanel = new JPanel();
+		JLabel fieldLabel = new JLabel("Overall grade: ");
+		pane.add(needLabel, BorderLayout.WEST);
 		
-		pointsfield.setPreferredSize(new Dimension(20, pointsfield.getPreferredSize().height));
-		pointsfield.setHorizontalAlignment(SwingConstants.RIGHT);
-		fieldpanel.add(instructionslabel);
-		fieldpanel.add(new JLabel("     "));
-		fieldpanel.add(fieldlabel);
-		fieldpanel.add(pointsfield);
-		pane.add(fieldpanel, BorderLayout.NORTH);
-		JPanel buttonpanel = new JPanel();
-		JButton calculatebutton = new JButton("Calculate Points Needed");
-		JButton closebutton = new JButton("Close Window");
-		buttonpanel.add(calculatebutton);
-		buttonpanel.add(closebutton);
-		pane.add(buttonpanel, BorderLayout.SOUTH);
+		pointsField.setPreferredSize(new Dimension(20, pointsField.getPreferredSize().height));
+		pointsField.setHorizontalAlignment(SwingConstants.RIGHT);
+		fieldPanel.add(instructionsLabel);
+		fieldPanel.add(new JLabel("     "));
+		fieldPanel.add(fieldLabel);
+		fieldPanel.add(pointsField);
+		pane.add(fieldPanel, BorderLayout.NORTH);
+		JPanel buttonPanel = new JPanel();
+		JButton calculateButton = new JButton("Calculate Points Needed");
+		JButton closeButton = new JButton("Close Window");
+		buttonPanel.add(calculateButton);
+		buttonPanel.add(closeButton);
+		pane.add(buttonPanel, BorderLayout.SOUTH);
 		
 		//Action Listeners
-		calculatebutton.addActionListener(new ActionListener(){  
+		calculateButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				calculatePoints();
 			}  
 		});
-		closebutton.addActionListener(new ActionListener(){  
+		closeButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				pointsfield.setText("");
+				pointsField.setText("");
 				dispose();
 			}  
 		});
@@ -64,32 +64,32 @@ public class pointsneeded extends JDialog{
 		//Window Listener for Close Button
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				pointsfield.setText("");
+				pointsField.setText("");
 				dispose();
 		}
 		});
 		
-	}//End of points needed
+	}//End of PointsNeeded
 	
 	public void calculatePoints(){
 		
 		//Checks if input is a number and throw error message if not a number
-		if(utilities.misc.isANumber(pointsfield.getText())){
+		if(utilities.Misc.isANumber(pointsField.getText())){
 			
 			//Iterate loop until grade is calculated or an empty file is found
 			double grade = 0.0;
 			double known = 0.0;
 			double unknown = 0.0;
-			DefaultTableModel valuemodel = (DefaultTableModel) appframe.valuetable.getModel();
-			for(int i = 0; i < appframe.categorylist.size(); i++){
+			DefaultTableModel valueModel = (DefaultTableModel) AppFrame.valueTable.getModel();
+			for(int i = 0; i < AppFrame.categoryList.size(); i++){
 				
 				//If current category is loaded already
-				if(i == appframe.categorycombo.getSelectedIndex()){
-					if(valuemodel.getValueAt(6, 2).equals("N/A")){
-						unknown += Double.parseDouble(appframe.categorylist.get(i).getWeight());
+				if(i == AppFrame.categoryCombo.getSelectedIndex()){
+					if(valueModel.getValueAt(6, 2).equals("N/A")){
+						unknown += Double.parseDouble(AppFrame.categoryList.get(i).getWeight());
 					}//End of if
 					else{
-						known += Double.parseDouble(valuemodel.getValueAt(6, 2).toString());
+						known += Double.parseDouble(valueModel.getValueAt(6, 2).toString());
 					}//End of else
 				}//End of if
 				
@@ -99,10 +99,10 @@ public class pointsneeded extends JDialog{
 					try {
 						
 						//If file is empty
-						Scanner sc = new Scanner(new File(appframe.categorylist.get(i).getFilepath()));
+						Scanner sc = new Scanner(new File(AppFrame.categoryList.get(i).getFilePath()));
 						if(!(sc.hasNext())){
 							sc.close();
-							unknown += Double.parseDouble(appframe.categorylist.get(i).getWeight());
+							unknown += Double.parseDouble(AppFrame.categoryList.get(i).getWeight());
 						}//End of if
 						
 						//If file has atleast 1 grade
@@ -115,7 +115,7 @@ public class pointsneeded extends JDialog{
 								possible += Double.parseDouble(graderow[2]);
 							}//End of while
 							double percent = earned/possible;
-							double weighted = percent*Double.parseDouble(appframe.categorylist.get(i).getWeight());
+							double weighted = percent*Double.parseDouble(AppFrame.categoryList.get(i).getWeight());
 							known += weighted;
 						}//End of else
 						sc.close();
@@ -129,13 +129,13 @@ public class pointsneeded extends JDialog{
 			}//End of for
 			
 			//Calculate grade needed
-			known += Double.parseDouble(appframe.scalefield.getText());
-			grade = (Double.parseDouble(pointsfield.getText())-known)/unknown;
-			needlabel.setText("  " + "Percentage of points needed in categories without grades to get the above grade in course: " + grade*100 + "%");
+			known += Double.parseDouble(AppFrame.scaleField.getText());
+			grade = (Double.parseDouble(pointsField.getText())-known)/unknown;
+			needLabel.setText("  " + "Percentage of points needed in categories without grades to get the above grade in course: " + grade*100 + "%");
 			
 		}//End of if
 		else{
-			utilities.misc.errorMessage("Cannot calculate grade(s) needed, Value is blank or not a number.");
+			utilities.Misc.errorMessage("Cannot calculate grade(s) needed, Value is blank or not a number.");
 		}//End of else
 		
 	}//End of calculatePoints
@@ -143,9 +143,9 @@ public class pointsneeded extends JDialog{
 	public static void main(String[] args){
 		
 		//Launch new instance of frame
-		pointsneeded frame = new pointsneeded();
+		PointsNeeded frame = new PointsNeeded();
 	    frame.setVisible(true);
 	    
 	}//End of main
 
-}//End of pointsneeded
+}//End of PointsNeeded

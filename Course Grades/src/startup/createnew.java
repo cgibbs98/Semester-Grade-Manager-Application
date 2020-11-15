@@ -5,14 +5,14 @@ import java.awt.event.*;
 import java.io.File;
 import javax.swing.*;
 
-public class createnew extends JFrame{
+public class CreateNew extends JFrame{
 	
-	public static Box centerbox = Box.createVerticalBox();
-	public static JTextField createfield = new JTextField("");
-	public static int indexhold = 0;
-	public static int classcount = 0;
+	public static Box centerBox = Box.createVerticalBox();
+	public static JTextField createField = new JTextField("");
+	public static int indexHold = 0;
+	public static int classCount = 0;
 	
-	public createnew(){
+	public CreateNew(){
 		
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -28,60 +28,60 @@ public class createnew extends JFrame{
 		
 		//Create Course
 		Container pane = getContentPane();
-		JPanel createpanel = new JPanel();
-		JLabel createlabel = new JLabel("Semester Name: ");
-		createfield.setPreferredSize(new Dimension(150, createfield.getPreferredSize().height));
-		JButton createbutton = new JButton("Create New Semester");
-		createpanel.add(createlabel);
-		createpanel.add(createfield);
-		createpanel.add(createbutton);
-		pane.add(createpanel, BorderLayout.NORTH);
+		JPanel createPanel = new JPanel();
+		JLabel createLabel = new JLabel("Semester Name: ");
+		createField.setPreferredSize(new Dimension(150, createField.getPreferredSize().height));
+		JButton createButton = new JButton("Create New Semester");
+		createPanel.add(createLabel);
+		createPanel.add(createField);
+		createPanel.add(createButton);
+		pane.add(createPanel, BorderLayout.NORTH);
 		
-		JScrollPane centerpane = new JScrollPane(centerbox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-	    centerpane.setPreferredSize(new Dimension(centerbox.getPreferredSize().width+17, centerbox.getPreferredSize().height));
-	    pane.add(centerpane, BorderLayout.CENTER);
-	    newactions.newClassPanel(true);
+		JScrollPane centerPane = new JScrollPane(centerBox, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+	    centerPane.setPreferredSize(new Dimension(centerBox.getPreferredSize().width+17, centerBox.getPreferredSize().height));
+	    pane.add(centerPane, BorderLayout.CENTER);
+	    NewActions.newClassPanel(true);
 		
 		//Button Actions
-		JPanel actionspanel = new JPanel();
-		JButton addcategorybutton = new JButton("Add New Category");
-		JButton addclassbutton = new JButton("Add New Class");
-		JButton deletecategorybutton = new JButton("Delete Last Category");
-		JButton deleteclassbutton = new JButton("Delete Last Class");
-		actionspanel.add(addcategorybutton);
-		actionspanel.add(addclassbutton);
-		actionspanel.add(deletecategorybutton);
-		actionspanel.add(deleteclassbutton);
-		pane.add(actionspanel, BorderLayout.SOUTH);
+		JPanel actionsPanel = new JPanel();
+		JButton addCategoryButton = new JButton("Add New Category");
+		JButton addClassButton = new JButton("Add New Class");
+		JButton deleteCategoryButton = new JButton("Delete Last Category");
+		JButton deleteClassButton = new JButton("Delete Last Class");
+		actionsPanel.add(addCategoryButton);
+		actionsPanel.add(addClassButton);
+		actionsPanel.add(deleteCategoryButton);
+		actionsPanel.add(deleteClassButton);
+		pane.add(actionsPanel, BorderLayout.SOUTH);
 		
 		//Action Listeners
-		addclassbutton.addActionListener(new ActionListener(){  
+		addClassButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				newactions.newClassPanel(false);
+				NewActions.newClassPanel(false);
 			}  
 		});
-		addcategorybutton.addActionListener(new ActionListener(){  
+		addCategoryButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				newactions.newCategoryPanel(false);
+				NewActions.newCategoryPanel(false);
 			}  
 		});
-		deleteclassbutton.addActionListener(new ActionListener(){  
+		deleteClassButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				newactions.deleteLastClass();
+				NewActions.deleteLastClass();
 			}  
 		});
-		deletecategorybutton.addActionListener(new ActionListener(){  
+		deleteCategoryButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				newactions.deleteLastCategory();
+				NewActions.deleteLastCategory();
 			}  
 		});
-		createbutton.addActionListener(new ActionListener(){  
+		createButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
-				fileactions.saveSemester();
-				String name = fileactions.getFileName();
+				FileActions.saveSemester();
+				String name = FileActions.getFileName();
 				if(name != null){
 					dispose();
-					application.appframe.main(name, true);
+					application.AppFrame.main(name, true);
 				}//End of if
 			}  
 		});
@@ -89,23 +89,23 @@ public class createnew extends JFrame{
 		//Window Listener for Close Button
 		addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-            	File relaunchfile = new File("relaunch.txt");
-		    	try {relaunchfile.createNewFile();} catch (Exception ex) {}
-            	newactions.removeAllComponents();
-            	createfield.setText("");
+            	File relaunchFile = new File("relaunch.txt");
+		    	try {relaunchFile.createNewFile();} catch (Exception ex) {}
+            	NewActions.removeAllComponents();
+            	createField.setText("");
             	dispose();
-            	launch.main(null);
+            	Launch.main(null);
             }
         });
 		
-	}//End of createnew
+	}//End of CreateNew
 	
 	public static void main(String[] args) {
 		
 		//Launch new instance of frame
-		createnew frame = new createnew();
+		CreateNew frame = new CreateNew();
 		frame.setVisible(true);
 
 	}//End of main
 
-}//End of createnew
+}//End of CreateNew

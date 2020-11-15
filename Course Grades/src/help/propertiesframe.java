@@ -9,9 +9,9 @@ import java.text.*;
 import java.util.*;
 import javax.swing.*;
 
-public class propertiesframe extends JDialog{
+public class PropertiesFrame extends JDialog{
 
-	public propertiesframe(String filename){
+	public PropertiesFrame(String fileName){
 		
 		//Size
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -28,63 +28,63 @@ public class propertiesframe extends JDialog{
 		
 		//Components
 		Container pane = getContentPane();
-		JPanel filepanel = new JPanel();
-		JLabel filelabel = new JLabel("Semester Filepath: " + System.getProperty("user.dir") + "/savedsemesters/" + filename);
-		filepanel.add(filelabel);
-		pane.add(filepanel, BorderLayout.NORTH);
+		JPanel filePanel = new JPanel();
+		JLabel fileLabel = new JLabel("Semester Filepath: " + System.getProperty("user.dir") + "/savedsemesters/" + fileName);
+		filePanel.add(fileLabel);
+		pane.add(filePanel, BorderLayout.NORTH);
 		
 		//Properties
-		Box propbox = Box.createVerticalBox();
-		propbox.add(new JLabel(" "));
-		long foldersize = getFolderSize(new File(System.getProperty("user.dir") + "/savedsemesters/" + filename));
-		propbox.add(new JLabel("  " + "Folder Size:                " + foldersize + " bytes (" + (foldersize/(double)1024) + " KB)"));
+		Box propBox = Box.createVerticalBox();
+		propBox.add(new JLabel(" "));
+		long folderSize = getfolderSize(new File(System.getProperty("user.dir") + "/savedsemesters/" + fileName));
+		propBox.add(new JLabel("  " + "Folder Size:                " + folderSize + " bytes (" + (folderSize/(double)1024) + " KB)"));
 		FileTime creation;
 		try {
-			creation = (FileTime) Files.getAttribute(Paths.get(System.getProperty("user.dir") + "/savedsemesters/" + filename), "creationTime");
+			creation = (FileTime) Files.getAttribute(Paths.get(System.getProperty("user.dir") + "/savedsemesters/" + fileName), "creationTime");
 		} catch (Exception e) {
-			utilities.misc.errorMessage("An error has occured, Please try again later.");
+			utilities.Misc.errorMessage("An error has occured, Please try again later.");
 			dispose();
 			return;
 		}
 		FileTime modified;
 		try {
-			modified = (FileTime) Files.getAttribute(Paths.get(System.getProperty("user.dir") + "/savedsemesters/" + filename + "/master.txt"), "lastModifiedTime");
+			modified = (FileTime) Files.getAttribute(Paths.get(System.getProperty("user.dir") + "/savedsemesters/" + fileName + "/master.txt"), "lastModifiedTime");
 		} catch (Exception e) {
-			utilities.misc.errorMessage("An error has occured, Please try again later.");
+			utilities.Misc.errorMessage("An error has occured, Please try again later.");
 			dispose();
 			return;
 		}
-	    SimpleDateFormat dateformat = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss aa");
-	    propbox.add(new JLabel("  " + "File Creation Time:   " + dateformat.format(creation.toMillis())));
-	    propbox.add(new JLabel("  " + "Last Modified Time: " + dateformat.format(modified.toMillis())));
-	    propbox.add(new JLabel("  " + "Total Table Cells:      " + getTotalCells(new File(System.getProperty("user.dir") + "/savedsemesters/" + filename))));
-		pane.add(propbox, BorderLayout.WEST);
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy hh:mm:ss aa");
+	    propBox.add(new JLabel("  " + "File Creation Time:   " + dateFormat.format(creation.toMillis())));
+	    propBox.add(new JLabel("  " + "Last Modified Time: " + dateFormat.format(modified.toMillis())));
+	    propBox.add(new JLabel("  " + "Total Table Cells:      " + getTotalCells(new File(System.getProperty("user.dir") + "/savedsemesters/" + fileName))));
+		pane.add(propBox, BorderLayout.WEST);
 		
 		//Close button
-		JPanel buttonpanel = new JPanel();
-		JButton openbutton = new JButton("Open Folder");
-		JButton closebutton = new JButton("Close Window");
-		buttonpanel.add(openbutton);
-		buttonpanel.add(closebutton);
-		pane.add(buttonpanel, BorderLayout.SOUTH);
+		JPanel buttonPanel = new JPanel();
+		JButton openButton = new JButton("Open Folder");
+		JButton closeButton = new JButton("Close Window");
+		buttonPanel.add(openButton);
+		buttonPanel.add(closeButton);
+		pane.add(buttonPanel, BorderLayout.SOUTH);
 		
 		//Action Listeners
-		openbutton.addActionListener(new ActionListener(){  
+		openButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				
 				//Open current semester folder
 				Desktop desktop = Desktop.getDesktop();
 		        File open = null;
 		        try {
-		            open = new File(System.getProperty("user.dir") + "/savedsemesters/" + filename);
+		            open = new File(System.getProperty("user.dir") + "/savedsemesters/" + fileName);
 		            desktop.open(open);
 		        } catch (Exception ex) {
-		        	utilities.misc.errorMessage("An error has occured, Please try again later.");
+		        	utilities.Misc.errorMessage("An error has occured, Please try again later.");
 		        }
 		        
 			}  
 		});
-		closebutton.addActionListener(new ActionListener(){  
+		closeButton.addActionListener(new ActionListener(){  
 			public void actionPerformed(ActionEvent e){
 				dispose();
 			}  
@@ -98,13 +98,13 @@ public class propertiesframe extends JDialog{
 		});
 		setVisible(true);
 		
-	}//End of propertiesframe
+	}//End of PropertiesFrame
 	
 	
 	
 	
 	
-	public long getFolderSize(File folder){
+	public long getfolderSize(File folder){
 		
 		//Gets size of current semester folder by adding each individual file and subfolder recursively (Tutorial at: https://www.geeksforgeeks.org/java-program-to-get-the-size-of-a-directory/)
 		long length = 0; 
@@ -114,12 +114,12 @@ public class propertiesframe extends JDialog{
                 length += files[i].length(); 
             }//End of if
             else { 
-                length += getFolderSize(files[i]); 
+                length += getfolderSize(files[i]); 
             }//End of else
         }//End of for
         return length; 
 		
-	}//End of getFolderSize
+	}//End of getfolderSize
 	
 	public int getTotalCells(File folder){
 		
@@ -132,18 +132,17 @@ public class propertiesframe extends JDialog{
         	if(files[i].isDirectory()) {
                 File[] categories = files[i].listFiles();
                 for(int j = 0; j < categories.length; j++) {
-                	Scanner rowscanner = null;
+                	Scanner rowScanner = null;
 					try {
-						rowscanner = new Scanner(categories[j]);
+						rowScanner = new Scanner(categories[j]);
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						
 					}
-                	while(rowscanner.hasNext()){
-                		rowscanner.nextLine();
+                	while(rowScanner.hasNext()){
+                		rowScanner.nextLine();
                 		rows++;
                 	}//End of while
-                	rowscanner.close();
+                	rowScanner.close();
                 }//End of for
                 
             }//End of if
@@ -153,11 +152,11 @@ public class propertiesframe extends JDialog{
 		
 	}//End of getFolderCount
 	
-	public static void main(String filename){
+	public static void main(String fileName){
 		
 		//Launch new instance of frame
-		propertiesframe frame = new propertiesframe(filename);
+		PropertiesFrame frame = new PropertiesFrame(fileName);
 		
 	}//End of main
 	
-}//End of propertiesframe
+}//End of PropertiesFrame

@@ -3,7 +3,7 @@ package utilities;
 import java.awt.*;
 import javax.swing.*;
 
-public class misc{
+public class Misc{
 
 	public static void errorMessage(String message){
 		
@@ -35,4 +35,4 @@ public class misc{
 		
 	}//End of isANumber
 
-}//End of misc
+}//End of Misc

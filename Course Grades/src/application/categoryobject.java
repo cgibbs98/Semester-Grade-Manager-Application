@@ -1,15 +1,15 @@
 package application;
 
-public class categoryobject {
+public class CategoryObject {
 
 	private String name;
 	private String weight;
-	private String filepath;
+	private String filePath;
 	
-	public categoryobject(String name, String weight, String filepath) { 
+	public CategoryObject(String name, String weight, String filePath) { 
 		this.name = name; 
 		this.weight = weight; 
-		this.filepath = filepath; 
+		this.filePath = filePath; 
 	} 
 	
 	public String getName() {
@@ -20,8 +20,8 @@ public class categoryobject {
 	    return weight;
 	}
 	
-	public String getFilepath() {
-	    return filepath;
+	public String getFilePath() {
+	    return filePath;
 	}
 	
 	public void setName(String value) {
@@ -32,8 +32,8 @@ public class categoryobject {
 		this.weight = value;
 	}
 	
-	public void setFilepath(String value) {
-		this.filepath = value;
+	public void setFilePath(String value) {
+		this.filePath = value;
 	}
 	
-}//End of category object
+}//End of CategoryObject
