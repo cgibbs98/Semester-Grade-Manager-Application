@@ -1,3 +1,0 @@
-The quicklaunch utility is designed so you do not have to go through the launch menu and file chooser every time you want to update your grades. Every time you update your grades, the program will keep track of the last class and category that was updated and use it to instantly open that category next time the program is launched.
-
-You can enable and disable it anytime and then save for changes to take effect. Disabling it will open up the launch menu as normal, but give you the option to open up the semester immediately.

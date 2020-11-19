@@ -1,1 +1,0 @@
-The help menu provides topics regarding how to use the application, some metadata involving the currently selected semester, and an About window that provides GitHub links to both the author of this project and its repository where the source code and licensing for this project can be viewed.
